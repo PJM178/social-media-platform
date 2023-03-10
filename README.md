@@ -3,6 +3,6 @@ The aim of this web app is to mimic something like Twitter. Users can register a
 
 Currently working on:
 
-  *Implemented Apollo Server and postreSQL and simple query.
+* Implemented Apollo Server and postreSQL and simple query.
 
 Made with TypeScript and React in the frontend and TypeScript and GraphQL in the backend. PostgreSQL is used as a database.
