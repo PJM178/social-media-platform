@@ -19,7 +19,7 @@ interface MyContext {
 import books from './data/books.js';
 import { connectToDatabase } from './utilities/db.js';
 import { PORT } from './utilities/config.js';
-// import Post from './models/post.js';
+import Post from './models/post.js';
 
 // Required logic for integrating with Express
 const app = express();
@@ -52,14 +52,14 @@ const httpServer = http.createServer(app);
 const resolvers = {
   Query: {
     books: () => books,
-    // allBlogs: async () => {
-    //   const blogs = await Post.findAll({
-    //     order: [
-    //       ['likes', 'DESC']
-    //     ],
-    //   });
-    //   return blogs;
-    // },
+    allPosts: async () => {
+      const posts = await Post.findAll({
+        order: [
+          ['likes', 'DESC']
+        ],
+      });
+      return posts;
+    },
   },
 };
 
