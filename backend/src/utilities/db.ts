@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { DATABASE_URL } from './config';
+import { Umzug, SequelizeStorage } from 'umzug';
 
 const sequelize = new Sequelize(DATABASE_URL as never, {
   dialectOptions: {
@@ -13,6 +14,7 @@ const sequelize = new Sequelize(DATABASE_URL as never, {
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
+    await runMigrations();
     console.log('Connected to the database');
   } catch (error) {
     console.log('Failed to connect to the database');
@@ -22,6 +24,22 @@ const connectToDatabase = async () => {
 
   return null;
 };
+
+const umzug = new Umzug({
+  migrations: { glob: './src/migrations/*.ts' },
+  context: sequelize.getQueryInterface(),
+  storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
+  logger: console,
+});
+
+const runMigrations = async () => {
+  const migrations = await umzug.up();
+  console.log('Migrations up to date', {
+    files: migrations.map((mig) => mig.name),
+  });
+};
+
+export type Migration = typeof umzug._types.migration;
 
 export {
   connectToDatabase, sequelize,

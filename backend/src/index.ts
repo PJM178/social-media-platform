@@ -10,7 +10,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
+import typeDefs from './schema/index.js';
 
 interface MyContext {
   token?: string;
@@ -19,7 +19,7 @@ interface MyContext {
 import books from './data/books.js';
 import { connectToDatabase } from './utilities/db.js';
 import { PORT } from './utilities/config.js';
-import Blog from './models/blog.js';
+// import Post from './models/post.js';
 
 // Required logic for integrating with Express
 const app = express();
@@ -28,44 +28,38 @@ const app = express();
 // enabling our servers to shut down gracefully.
 const httpServer = http.createServer(app);
 
-const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
+// const typeDefs = `#graphql
+//   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Blog {
-    id: ID!
-    author: String,
-    url: String,
-    title: String,
-    likes: Int,
-    year: Int
-  }
+//   # This "Book" type defines the queryable fields for every book in our data source.
+//   type Blog {
+//     id: ID!
+//     author: String,
+//     url: String,
+//     title: String,
+//     likes: Int,
+//     year: Int
+//   }
 
-  type Book {
-    author: String,
-    title: String
-  }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    books: [Book]
-    allBlogs: [Blog]
-  }
-`;
+//   # The "Query" type is special: it lists all of the available queries that
+//   # clients can execute, along with the return type for each. In this
+//   # case, the "books" query returns an array of zero or more Books (defined above).
+//   type Query {
+//     allBlogs: [Blog]
+//   }
+// `;
 
 const resolvers = {
   Query: {
     books: () => books,
-    allBlogs: async () => {
-      const blogs = await Blog.findAll({
-        order: [
-          ['likes', 'DESC']
-        ],
-      });
-      return blogs;
-    },
+    // allBlogs: async () => {
+    //   const blogs = await Post.findAll({
+    //     order: [
+    //       ['likes', 'DESC']
+    //     ],
+    //   });
+    //   return blogs;
+    // },
   },
 };
 

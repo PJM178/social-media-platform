@@ -2,44 +2,44 @@ import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
 
-class Blog extends Model {}
+class User extends Model {}
 
-Blog.init({
+User.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+  },
+  username: {
+    type: DataTypes.STRING,
     unique: true,
-  },
-  author: {
-    type: DataTypes.STRING,
-  },
-  url: {
-    type: DataTypes.STRING,
     allowNull: false,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  likes: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  year: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: new Date().getFullYear(),
     validate: {
-      min: 1991,
-      max: new Date().getFullYear(),
+      notEmpty: true,
+      isEmail: true,
     },
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password_hash: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
   },
 }, {
   sequelize,
   underscored: true,
   timestamps: true,
-  modelName: 'blog',
+  modelName: 'user',
 });
 
-export default Blog;
+export default User;
