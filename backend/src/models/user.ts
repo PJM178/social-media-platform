@@ -16,22 +16,21 @@ User.init({
     allowNull: false,
     validate: {
       notEmpty: true,
-      isEmail: true,
     },
   },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  password_hash: {
+  passwordHash: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  created_at: {
+  createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  updated_at: {
+  updatedAt: {
     type: DataTypes.DATE,
     allowNull: false,
   },

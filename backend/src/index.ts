@@ -10,16 +10,16 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import typeDefs from './schema/index.js';
-
-interface MyContext {
-  token?: string;
-}
 
 import { connectToDatabase } from './utilities/db.js';
 import { PORT } from './utilities/config.js';
-import Post from './models/post.js';
-import { PostEntry } from './types/post.js';
+import typeDefs from './schema/index.js';
+import resolvers from './resolvers/index.js';
+
+// Types for packages
+interface MyContext {
+  token?: string;
+}
 
 // Required logic for integrating with Express
 const app = express();
@@ -27,53 +27,6 @@ const app = express();
 // Below, we tell Apollo Server to "drain" this httpServer,
 // enabling our servers to shut down gracefully.
 const httpServer = http.createServer(app);
-
-// const typeDefs = `#graphql
-//   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-//   # This "Book" type defines the queryable fields for every book in our data source.
-//   type Blog {
-//     id: ID!
-//     author: String,
-//     url: String,
-//     title: String,
-//     likes: Int,
-//     year: Int
-//   }
-
-//   # The "Query" type is special: it lists all of the available queries that
-//   # clients can execute, along with the return type for each. In this
-//   # case, the "books" query returns an array of zero or more Books (defined above).
-//   type Query {
-//     allBlogs: [Blog]
-//   }
-// `;
-
-const resolvers = {
-  Query: {
-    allPosts: async (data: unknown) => {
-      console.log(data);
-      const posts = await Post.findAll({
-        order: [
-          ['likes', 'DESC']
-        ],
-      });
-      return posts;
-    },
-  },
-  Mutation: {
-    addPost: async (_root: unknown, args: PostEntry) => {
-      console.log(args);
-      // const jorma = {
-      //   userId: 2,
-      //   content: 'testi',
-      //   title: 'testi',
-      // };
-      const post = await Post.create({ ...args });
-      return post;
-    },
-  },
-};
 
 // Same ApolloServer initialization as before, plus the drain plugin
 // for our httpServer.
