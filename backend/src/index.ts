@@ -16,10 +16,10 @@ interface MyContext {
   token?: string;
 }
 
-import books from './data/books.js';
 import { connectToDatabase } from './utilities/db.js';
 import { PORT } from './utilities/config.js';
 import Post from './models/post.js';
+import { PostEntry } from './types/post.js';
 
 // Required logic for integrating with Express
 const app = express();
@@ -51,14 +51,26 @@ const httpServer = http.createServer(app);
 
 const resolvers = {
   Query: {
-    books: () => books,
-    allPosts: async () => {
+    allPosts: async (data: unknown) => {
+      console.log(data);
       const posts = await Post.findAll({
         order: [
           ['likes', 'DESC']
         ],
       });
       return posts;
+    },
+  },
+  Mutation: {
+    addPost: async (_root: unknown, args: PostEntry) => {
+      console.log(args);
+      // const jorma = {
+      //   userId: 2,
+      //   content: 'testi',
+      //   title: 'testi',
+      // };
+      const post = await Post.create({ ...args });
+      return post;
     },
   },
 };
