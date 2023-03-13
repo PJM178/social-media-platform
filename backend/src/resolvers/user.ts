@@ -25,7 +25,6 @@ export const userResolvers = {
       };
 
       const user = await User.create(newUser);
-
       return user;
     }
   }

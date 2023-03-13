@@ -14,7 +14,7 @@ const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        isEmail: true,
+        len: [3, 20],
       },
     },
     name: {
