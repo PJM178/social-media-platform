@@ -7,6 +7,7 @@ const postTypeDefs = `
     likes: Int,
     createdAt: String,
     updatedAt: String
+    user: User
   }
 
   type Query {

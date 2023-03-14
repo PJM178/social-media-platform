@@ -6,6 +6,9 @@ export const GET_ALL_POSTS = gql`
       title
       content
       id
+      user {
+        username
+      }
     }
   }
 `;

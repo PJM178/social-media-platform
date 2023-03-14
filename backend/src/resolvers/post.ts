@@ -1,4 +1,4 @@
-import Post from '../models/post';
+import { Post, User } from '../models/index';
 
 import { PostEntry } from '../types/post';
 
@@ -7,9 +7,19 @@ export const postResolvers = {
     allPosts: async () => {
       const posts = await Post.findAll({
         order: [
-          ['likes', 'DESC']
+          ['updatedAt', 'DESC']
         ],
+        include: {
+          model: User,
+          attributes: { include: ['username'] }
+          // as: 'userposts',
+          // attributes: ['username'],
+          // through: {
+          //   attributes: []
+          // }
+        },
       });
+      console.log(posts);
       return posts;
     },
   },
