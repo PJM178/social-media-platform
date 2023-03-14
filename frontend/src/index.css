@@ -1,3 +1,25 @@
+/* light and dark color theming */
+
+html[data-theme='light'] {
+  --background-color: #fff;
+  --text-color: #121416d8;
+  --link-color: #543fd7;
+}
+
+html[data-theme='dark'] {
+  --background-color: #212a2e;
+  --text-color: #F7F8F8;
+  --link-color: #828fff;
+}
+
+:root {
+  --background-color: #fff;
+  --color: #121416d8;
+  --link-color: #543fd7;
+}
+
+/* light and dark color theming */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +27,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+/* just putting these here for now for links */
+a {
+  color: var(--link-color)
+}
+
+a:hover {
+  text-decoration: underline;
+  filter: brightness(80%);
 }
 
 code {
