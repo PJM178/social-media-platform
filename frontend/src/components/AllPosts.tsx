@@ -22,9 +22,9 @@ const AllPosts = () => {
 
   return (
     <section className='post-container'>
-      {data.allPosts.map((post: PostType) => (
+      {data ? data.allPosts?.map((post: PostType) => (
         <Post key={post.id} post={post} />
-      ))}
+      )) : null}
       <h1>AllPosts</h1>
     </section>
   );

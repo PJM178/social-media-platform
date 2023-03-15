@@ -1,13 +1,24 @@
 import bcrypt from 'bcrypt';
 
-import User from '../models/user';
+import { User, LikedPost } from '../models/index';
 import { UserEntry } from '../types/user';
+// import { LikedPostEntry } from '../types/post';
 
 export const userResolvers = {
   Query: {
     allUsers: async () => {
-      const users = await User.findAll({});
+      const users = await User.findAll({
+        include: {
+          model: LikedPost,
+          attributes: { include: ['postId'] }
+        }
+      });
+
       return users;
+    },
+    allLikedPosts: async () => {
+      const likedPosts = await LikedPost.findAll({});
+      return likedPosts;
     }
   },
   Mutation: {

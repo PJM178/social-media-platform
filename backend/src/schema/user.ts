@@ -6,10 +6,11 @@ const userTypeDefs = `
     passwordHash: String!,
     createdAt: String,
     updatedAt: String
+    likedPost: LikedPost
   }
 
   type Query {
-    allUsers: [User!]
+    allUsers: [User]
   }
 
   type Mutation {

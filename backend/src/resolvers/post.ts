@@ -11,12 +11,16 @@ export const postResolvers = {
         ],
         include: {
           model: User,
-          attributes: { include: ['username'] }
+          attributes: { include: ['username'] },
           // as: 'userposts',
           // attributes: ['username'],
           // through: {
           //   attributes: []
           // }
+          // include: {
+          //   model: LikedPosts,
+          //   attributes: { include: ['postId'] }
+          // },
         },
       });
       console.log(posts);

@@ -2,9 +2,9 @@ import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
 
-class UserPosts extends Model {}
+class LikedPost extends Model {}
 
-UserPosts.init({
+LikedPost.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,7 +24,7 @@ UserPosts.init({
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'user_post',
+  modelName: 'liked_post',
 });
 
-export default UserPosts;
+export default LikedPost;

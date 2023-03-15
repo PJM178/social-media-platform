@@ -1,24 +1,27 @@
-/* light and dark color theming */
+/* Start - light and dark color theming */
 
 html[data-theme='light'] {
   --background-color: #fff;
   --text-color: #121416d8;
-  --link-color: #543fd7;
+  --link-color: #121416d8;
+  --drop-shadow: rgba(0, 0, 0, 0.6)
 }
 
 html[data-theme='dark'] {
   --background-color: #212a2e;
   --text-color: #F7F8F8;
-  --link-color: #828fff;
+  --link-color: #F7F8F8;
+  --drop-shadow: rgba(255, 255, 255, 0.6)
 }
 
 :root {
   --background-color: #fff;
   --color: #121416d8;
-  --link-color: #543fd7;
+  --link-color: #121416d8;
+  --drop-shadow: rgba(0, 0, 0, 0.6)
 }
 
-/* light and dark color theming */
+/* End - light and dark color theming */
 
 body {
   margin: 0;
@@ -33,17 +36,34 @@ body {
 
 /* just putting these here for now for links */
 a {
-  color: var(--link-color)
+  color: var(--link-color);
 }
 
 a:hover {
   text-decoration: underline;
-  filter: brightness(80%);
+  filter: drop-shadow(0px 0px 4px var(--drop-shadow));
+  cursor: pointer;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: green;
+  height: 50px;
+  align-items: center;
+}
+
+aside {
+  position: fixed;
+  right: 0px;
+  top : 50px;
+  padding: 1rem;
 }
 
 .post-container {
@@ -61,18 +81,38 @@ code {
   margin-bottom: 5px;
 }
 
-header {
-  display: flex;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: darkgreen;
+.theme {
+  width: 50px;
   height: 50px;
 }
 
-aside {
-  position: fixed;
-  right: 0px;
-  top : 50px;
-  padding: 1rem;
+.theme-container {
+  margin-left: auto;
+  width: 50px;
+  height: 50px;
+}
+
+.header-nav-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  margin-left: 1rem;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.nav-link-container {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  font-weight: bold;
+  margin-right: 1rem;
 }
