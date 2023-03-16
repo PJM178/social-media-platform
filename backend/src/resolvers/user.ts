@@ -10,11 +10,22 @@ export const userResolvers = {
       const users = await User.findAll({
         include: {
           model: LikedPost,
-          attributes: { include: ['postId'] }
-        }
+          attributes: ['postId', 'userId'],
+          as: 'likedPosts'
+        } 
       });
 
       return users;
+    },
+    singleUser: async (_root: unknown, args: { id: number }) => {
+      const user = await User.findByPk(args.id, {
+        include: {
+          model: LikedPost,
+          as: 'likedPosts',
+        }
+      });
+
+      return user;
     },
     allLikedPosts: async () => {
       const likedPosts = await LikedPost.findAll({});
@@ -24,9 +35,7 @@ export const userResolvers = {
   Mutation: {
     createUser: async (_root: unknown, args: UserEntry) => {
       const { username, name, password } = args;
-      console.log(username, name, password);
       const saltRounds = 10;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const passwordHash: string = await bcrypt.hash(password, saltRounds);
 
       const newUser = {

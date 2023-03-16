@@ -1,8 +1,8 @@
 const likedPostsTypeDefs = `
   type LikedPost {
     id: ID
-    userId: Int
-    postId: Int
+    userId: Int!
+    postId: Int!
   }
 
   type Query {

@@ -32,16 +32,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--background-color);
   color: var(--text-color);
+  transition-property: var(--background-color);
+  transition-duration: 500ms;
 }
 
 /* just putting these here for now for links */
 a {
   color: var(--link-color);
+  transition-duration: 500ms;
+  transition-property: var(--link-color);
 }
 
 a:hover {
   text-decoration: underline;
-  filter: drop-shadow(0px 0px 4px var(--drop-shadow));
+  /* filter: drop-shadow(0px 0px 4px var(--drop-shadow)); */
   cursor: pointer;
 }
 

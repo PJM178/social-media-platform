@@ -5,8 +5,8 @@ const postTypeDefs = `
     content: String!,
     title: String!,
     likes: Int,
-    createdAt: String,
-    updatedAt: String
+    createdAt: String!,
+    updatedAt: String!,
     user: User
   }
 

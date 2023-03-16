@@ -23,7 +23,7 @@ export const postResolvers = {
           // },
         },
       });
-      console.log(posts);
+
       return posts;
     },
   },
