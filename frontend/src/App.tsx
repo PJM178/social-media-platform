@@ -25,7 +25,7 @@ const App = () => {
   return (
     <div>
       <Header />
-      <AllPosts />
+      {data && <AllPosts user={data.singleUser} />}
       <SidePanel />
       <PostForm />
     </div>
