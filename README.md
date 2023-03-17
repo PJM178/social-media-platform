@@ -3,6 +3,8 @@ The aim of this web app is to mimic something like Twitter. Users can register a
 
 Currently features:
 
-* N/A
+* Displaying all posts on the homepage
+* Adding new posts, updeting the homepage view
+* Liking posts (only incrementing the like amount by 1 currently)
 
 Made with TypeScript and React in the frontend and TypeScript and GraphQL in the backend. PostgreSQL is used as a database.

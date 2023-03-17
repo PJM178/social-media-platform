@@ -12,7 +12,7 @@ const Post = ({ post, user }: PostProps) => {
   console.log(data, loading, error);
 
   const handleLikePost = async (direction: 'dec' | 'inc') => {
-    await editLikes({ variables: { id: String(post.id), type: direction } });
+    await editLikes({ variables: { id: post.id, type: direction } });
   };
 
   return (
