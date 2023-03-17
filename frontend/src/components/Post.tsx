@@ -1,11 +1,19 @@
 import { PostProps } from '../types/post';
+import { useMutation } from '@apollo/client';
+
+import { EDIT_LIKES } from '../mutations/post';
+import { GET_ALL_POSTS } from '../queries/post';
 
 const Post = ({ post, user }: PostProps) => {
-  // console.log(user.likedPosts.some(likedPost => likedPost.postId === post.id));
+  const [editLikes, { data, loading, error }] = useMutation(EDIT_LIKES, {
+    refetchQueries: [{ query: GET_ALL_POSTS }]
+  });
 
-  // const handleLikePost = () => {
+  console.log(data, loading, error);
 
-  // };
+  const handleLikePost = async (direction: 'dec' | 'inc') => {
+    await editLikes({ variables: { id: String(post.id), type: direction } });
+  };
 
   return (
     <article className='post'>
@@ -14,7 +22,7 @@ const Post = ({ post, user }: PostProps) => {
       <div>Content: {post.content}</div>
       <div>Likes: {post.likes}</div>
       {user.likedPosts.some(likedPost => likedPost.postId === Number(post.id))
-        ? <div style={{ color: '#FF006F' }}>&#9829;</div>
+        ? <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#9829;</div>
         : <div style={{ color: '#FF006F' }}>&#x2661;</div>
       }
     </article>

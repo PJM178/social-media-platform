@@ -15,4 +15,17 @@ export const ADD_POST = gql`
       title
     }
   }
+
+`;
+
+export const EDIT_LIKES = gql`
+  mutation EditLikes(
+    $id: ID, 
+    $type: String
+  ) { 
+    editLikes(
+    id: $id, 
+    type: $type
+    )
+  }
 `;
