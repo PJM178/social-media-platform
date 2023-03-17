@@ -21,6 +21,10 @@ const postTypeDefs = `
       likes: Int,
       userId: Int
     ): Post
+    editLikes(
+      id: ID,
+      type: String
+    ): String
   }
 `;
 

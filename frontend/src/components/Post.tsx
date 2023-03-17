@@ -1,7 +1,11 @@
 import { PostProps } from '../types/post';
 
 const Post = ({ post, user }: PostProps) => {
-  console.log(user.likedPosts.some(likedPost => likedPost.postId === post.id));
+  // console.log(user.likedPosts.some(likedPost => likedPost.postId === post.id));
+
+  // const handleLikePost = () => {
+
+  // };
 
   return (
     <article className='post'>
