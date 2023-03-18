@@ -29,7 +29,7 @@ export const postResolvers = {
     },
   },
   Mutation: {
-    addPost: async (_root: PostEntry, args: PostEntry) => {
+    addPost: async (_root: undefined, args: PostEntry) => {
       console.log(args);
       // const jorma = {
       //   userId: 2,
@@ -39,7 +39,7 @@ export const postResolvers = {
       const post = await Post.create({ ...args });
       return post;
     },
-    editLikes: async (_root: PostEntry, args: { id: number, type: 'inc' | 'dec' }) => {
+    editLikes: async (_root: undefined, args: { id: number, type: 'inc' | 'dec' }) => {
       const { id, type } = { ...args };
       if (type === 'inc') {
         try {

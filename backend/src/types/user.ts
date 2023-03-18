@@ -9,3 +9,17 @@ export interface UserEntry {
 export interface SingleUser {
   id: number
 }
+
+export interface Token {
+  value: string
+}
+
+export interface TokenUser {
+  username: string
+  id: string
+}
+
+export interface UserLogin {
+  username: string
+  password: string
+}

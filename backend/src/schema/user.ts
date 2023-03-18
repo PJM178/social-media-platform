@@ -14,6 +14,10 @@ const userTypeDefs = `
     likedPosts: [LikedPost]
   }
 
+  type Token {
+    value: String!
+  }
+
   type Query {
     allUsers: [User]
     singleUser(id: Int): User 
@@ -25,6 +29,10 @@ const userTypeDefs = `
       name: String!,
       password: String!,
     ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `;
 

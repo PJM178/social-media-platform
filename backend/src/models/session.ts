@@ -2,33 +2,32 @@ import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
 
-class LikedPost extends Model {
+class Session extends Model {
   declare id: string;
   declare userId: number;
-  declare postId: number;
+  declare userToken: string;
 }
 
-LikedPost.init({
+Session.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: { model: 'users', key: 'id' },
+    references: { model: 'users', key: 'id' }
   },
-  postId: {
-    type: DataTypes.INTEGER,
+  userToken: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: { model: 'posts', key: 'id' },
   },
 }, {
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'liked_post',
+  modelName: 'session',
 });
 
-export default LikedPost;
+export default Session;

@@ -2,7 +2,11 @@ import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
 
-class UserPosts extends Model {}
+class UserPosts extends Model {
+  declare id: string;
+  declare userId: number;
+  declare postId: number;
+}
 
 UserPosts.init({
   id: {

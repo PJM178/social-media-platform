@@ -2,7 +2,15 @@ import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
 
-class Post extends Model {}
+class Post extends Model {
+  declare id: string;
+  declare userId: number;
+  declare content: string;
+  declare title: string;
+  declare likes: number;
+  declare createdAt: Date;
+  declare updatedAt: Date;
+}
 
 Post.init({
   id: {
