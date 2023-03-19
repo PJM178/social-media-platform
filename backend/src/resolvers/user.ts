@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql';
 import jwt from 'jsonwebtoken';
 
 import { User, LikedPost, Session } from '../models/index';
-import { TokenUser, UserEntry, UserLogin } from '../types/user';
+import { UserEntry, UserLogin, Token } from '../types/user';
 // import { LikedPostEntry } from '../types/post';
 
 export const userResolvers = {
@@ -50,9 +50,10 @@ export const userResolvers = {
       const user = await User.create(newUser);
       return user;
     },
-    login: async (_root: undefined, args: UserLogin, context: TokenUser) => {
+    login: async (_root: undefined, args: UserLogin, context: Token) => {
       const user = await User.findOne({ where: { username: args.username } });
       console.log(context);
+
       const checkPassword = user === null
         ? false
         : await bcrypt.compare(args.password, user.passwordHash);
@@ -61,6 +62,14 @@ export const userResolvers = {
         throw new GraphQLError('Invalid Credentials', {
           extensions: {
             code: 'BAD_USER_INPUT'
+          },
+        });
+      }
+
+      if (user.disabled) {
+        throw new GraphQLError('Account disabled, contact admin', {
+          extensions: {
+            code: 'FORBIDDEN'
           },
         });
       }

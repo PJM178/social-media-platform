@@ -1,33 +1,29 @@
-import { useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router';
 
-import { GET_USER } from './queries/user';
-
+import HomePage from './components/HomePage';
+import SigninForm from './components/LoginForm';
 import Header from './components/Header';
-import AllPosts from './components/AllPosts';
 import SidePanel from './components/SidePanel';
-import PostForm from './components/PostForm';
 
 const App = () => {
-  const { loading, error, data } = useQuery(GET_USER, {
-    variables: { singleUserId: 2 }
-  });
-
-  console.log(data, loading, error);
+  const [theme, setTheme] = useState<string | null>(window.localStorage.getItem('theme'));
 
   useEffect(() => {
-    const currentTheme = window.localStorage.getItem('theme');
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
+    if (theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      window.localStorage.setItem('theme', theme);
     }
-  }, []);
+  }, [theme]);
 
   return (
     <div>
-      <Header />
-      {data && <AllPosts user={data.singleUser} />}
+      <Header theme={theme} setTheme={setTheme} />
       <SidePanel />
-      <PostForm />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/signin' element={<SigninForm />} />
+      </Routes>
     </div>
   );
 };

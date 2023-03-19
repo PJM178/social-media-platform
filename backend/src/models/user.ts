@@ -7,6 +7,8 @@ class User extends Model {
   declare username: string;
   declare name: string;
   declare passwordHash: string;
+  declare disabled: boolean;
+  declare admin: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
 }
@@ -33,6 +35,16 @@ User.init({
   passwordHash: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  admin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   },
   createdAt: {
     type: DataTypes.DATE,

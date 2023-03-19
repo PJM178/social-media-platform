@@ -5,7 +5,9 @@ const userTypeDefs = `
     name: String!,
     passwordHash: String!,
     createdAt: String!,
-    updatedAt: String!
+    updatedAt: String!,
+    disabled: Boolean!,
+    admin: Boolean!,
     """
     likedPosts named so as it's named in Sequelize associations
     the name has be the same as it's in the associations or the query
