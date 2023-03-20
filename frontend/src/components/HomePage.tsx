@@ -4,6 +4,7 @@ import { useLocation } from 'react-router';
 import { GET_USER } from '../queries/user';
 
 import AllPosts from './AllPosts';
+import PostForm from './PostForm';
 
 const HomePage = () => {
   const { state } = useLocation();
@@ -18,6 +19,7 @@ const HomePage = () => {
   return (
     <div>
       {data && <AllPosts user={data.singleUser} />}
+      <PostForm />
     </div>
   );
 };

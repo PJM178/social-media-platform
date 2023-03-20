@@ -34,7 +34,7 @@ const userTypeDefs = `
     login(
       username: String!
       password: String!
-    ): Token
+    ): User
   }
 `;
 

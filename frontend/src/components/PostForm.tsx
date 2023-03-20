@@ -7,7 +7,7 @@ import { GET_ALL_POSTS } from '../queries/post';
 const PostForm = () => {
   const [content, setContent] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const userId = 2;
+  const userId = 3;
 
   const [addPost, { data, loading, error }] = useMutation(ADD_POST, {
     refetchQueries: [{ query: GET_ALL_POSTS }]
@@ -26,6 +26,7 @@ const PostForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div>{error?.message}</div>
       <input placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
       <input placeholder='Content' value={content} onChange={(e) => setContent(e.target.value)} />
       <button type='submit'>Submit</button>

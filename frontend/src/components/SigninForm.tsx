@@ -41,7 +41,7 @@ const SigninForm = () => {
   useEffect(() => {
     if (data && isSubmitSuccessful) {
       // reset();
-      console.log(data);
+      console.log(data, loading);
       navigate('/');
     }
   }, [formState, reset]);

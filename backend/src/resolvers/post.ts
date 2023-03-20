@@ -1,7 +1,9 @@
 import { GraphQLError } from 'graphql';
+import cookie from 'cookie';
 
-import { Post, User } from '../models/index';
+import { Post, Session, User } from '../models/index';
 import { PostEntry } from '../types/post';
+import { Cookies } from '../types/user';
 
 export const postResolvers = {
   Query: {
@@ -29,15 +31,27 @@ export const postResolvers = {
     },
   },
   Mutation: {
-    addPost: async (_root: undefined, args: PostEntry) => {
-      console.log(args);
-      // const jorma = {
-      //   userId: 2,
-      //   content: 'testi',
-      //   title: 'testi',
-      // };
-      const post = await Post.create({ ...args });
-      return post;
+    addPost: async (_root: undefined, args: PostEntry, { req }: Cookies) => {
+      const token = cookie.parse(req.headers.cookie as string).token;
+      if (!token) {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+      const sessionToken = await Session.findOne({ where: { userToken: token } });
+      if (sessionToken) {
+        console.log('Session validated');
+        const post = await Post.create({ ...args });
+        return post;
+      } else {
+        throw new GraphQLError('Cannot validate the user', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
     },
     editLikes: async (_root: undefined, args: { id: number, type: 'inc' | 'dec' }) => {
       const { id, type } = { ...args };

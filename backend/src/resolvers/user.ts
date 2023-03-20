@@ -55,9 +55,8 @@ export const userResolvers = {
     login: async (_root: undefined, args: UserLogin, { req, res }: Cookies) => {
       const user = await User.findOne({ where: { username: args.username } });
 
-      console.log(req.headers.cookie);
       const cookies = req.headers.cookie;
-      console.log(cookie.parse(cookies));
+      console.log(cookie.parse(cookies as string).token);
 
       const checkPassword = user === null
         ? false
@@ -101,7 +100,7 @@ export const userResolvers = {
         }
       );
 
-      return { value: token };
+      return { ...userForToken };
     }
   }
 };
