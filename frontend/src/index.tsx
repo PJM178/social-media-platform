@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-
 import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
+  createHttpLink,
 } from '@apollo/client';
 
-
+const link = createHttpLink({
+  uri: 'http://localhost:4000',
+  credentials: 'include',
+});
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
+  link,
 });
 
 const root = ReactDOM.createRoot(

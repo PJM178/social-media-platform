@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import { GraphQLError } from 'graphql';
 import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
 
 import { User, LikedPost, Session } from '../models/index';
-import { UserEntry, UserLogin, Token } from '../types/user';
+import { UserEntry, UserLogin, Cookies } from '../types/user';
 // import { LikedPostEntry } from '../types/post';
 
 export const userResolvers = {
@@ -50,9 +51,13 @@ export const userResolvers = {
       const user = await User.create(newUser);
       return user;
     },
-    login: async (_root: undefined, args: UserLogin, context: Token) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    login: async (_root: undefined, args: UserLogin, { req, res }: Cookies) => {
       const user = await User.findOne({ where: { username: args.username } });
-      console.log(context);
+
+      console.log(req.headers.cookie);
+      const cookies = req.headers.cookie;
+      console.log(cookie.parse(cookies));
 
       const checkPassword = user === null
         ? false
@@ -88,6 +93,13 @@ export const userResolvers = {
       } else {
         await Session.create({ userToken: token, userId: user.id });
       }
+
+      res.cookie('token', token, 
+        {
+          maxAge: 1000*60*60*24,
+          httpOnly: true,
+        }
+      );
 
       return { value: token };
     }

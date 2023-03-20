@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 // Type for new user mutation
 export interface UserEntry {
   username: string
@@ -11,7 +13,12 @@ export interface SingleUser {
 }
 
 export interface Token {
-  value: string
+  token: string
+}
+
+export interface Cookies {
+  req: Request
+  res: Response
 }
 
 export interface TokenUser {

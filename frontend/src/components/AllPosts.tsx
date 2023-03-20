@@ -25,7 +25,6 @@ const AllPosts = ({ user }: UserProps) => {
       {data ? data.allPosts?.map((post: PostType) => (
         <Post key={post.id} post={post} user={user} />
       )) : null}
-      <h1>AllPosts</h1>
     </section>
   );
 };

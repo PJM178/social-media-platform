@@ -17,6 +17,7 @@ import { connectToDatabase } from './utilities/db.js';
 import { PORT } from './utilities/config.js';
 import typeDefs from './schema/index.js';
 import resolvers from './resolvers/index.js';
+import { Cookies as MyContext } from './types/user.js';
 // import User from './models/user.js';
 // import { TokenUser } from './types/user.js';
 
@@ -24,9 +25,10 @@ import resolvers from './resolvers/index.js';
 // interface MyContext {
 //   currentUser?: TokenUser;
 // }
-interface MyContext {
-  token?: string;
-}
+// interface MyContext {
+//   res?: Response
+//   req?: Request
+// }
 
 // Required logic for integrating with Express
 const app = express();
@@ -47,16 +49,22 @@ await server.start();
 await connectToDatabase();
 // Set up our Express middleware to handle CORS, body parsing,
 // and our expressMiddleware function.
+
+const corsOptions: cors.CorsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
 app.use(
-  cors<cors.CorsRequest>(),
+  cors<cors.CorsRequest>(corsOptions),
   bodyParser.json(),
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
     // eslint-disable-next-line @typescript-eslint/require-await
-    context: async ({ req }) => {
-      return { token: req.headers.authorization?.substring(7) };
-    }
+    context: async ({ req, res }) => ({ req, res })
+    //   return { token: req.headers.authorization?.substring(7) };
+    // }
     // const auth = req ? req.headers.authorization : null;
     // if (auth && auth.startsWith('Bearer ')) {
     //   const decodedToken = jwt.verify(
