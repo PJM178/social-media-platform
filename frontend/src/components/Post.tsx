@@ -9,7 +9,7 @@ const Post = ({ post, user }: PostProps) => {
     refetchQueries: [{ query: GET_ALL_POSTS }]
   });
 
-  console.log(data, loading, error);
+  // console.log(data, loading, error);
 
   const handleLikePost = async (direction: 'dec' | 'inc') => {
     await editLikes({ variables: { id: post.id, type: direction } });

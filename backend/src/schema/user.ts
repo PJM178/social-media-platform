@@ -35,6 +35,7 @@ const userTypeDefs = `
       username: String!
       password: String!
     ): User
+    logout: User
   }
 `;
 

@@ -5,3 +5,8 @@ export interface PostEntry {
   title: string
   likes?: number
 }
+
+export interface LikedPost {
+  postId: number
+  userId: number
+}

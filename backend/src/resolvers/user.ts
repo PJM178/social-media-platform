@@ -53,8 +53,15 @@ export const userResolvers = {
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     login: async (_root: undefined, args: UserLogin, { req, res }: Cookies) => {
-      const user = await User.findOne({ where: { username: args.username } });
-
+      const user = await User.findOne({ 
+        where: { username: args.username },
+        include: {
+          model: LikedPost,
+          attributes: ['postId', 'userId'],
+          as: 'likedPosts',
+        },
+      });
+      console.log(user);
       const cookies = req.headers.cookie;
       console.log(cookie.parse(cookies as string).token);
 
@@ -79,8 +86,14 @@ export const userResolvers = {
       }
 
       const userForToken = {
-        username: user.username,
         id: user.id
+      };
+
+      const returnedUser = {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        likedPosts: user.likedPosts,
       };
 
       const token = jwt.sign(userForToken, process.env.SECRET as string);
@@ -99,8 +112,31 @@ export const userResolvers = {
           httpOnly: true,
         }
       );
-
-      return { ...userForToken };
+      console.log(returnedUser);
+      return { ...returnedUser };
+    },
+    logout: async (_root: undefined, _args: undefined, { req, res }: Cookies) => {
+      const token = cookie.parse(req.headers.cookie as string).token;
+      console.log('logout', token);
+      if (!token) {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+      const sessionToken = await Session.findOne({ where: { userToken: token } });
+      if (sessionToken) {
+        await sessionToken.destroy();
+        res.clearCookie('token');
+        return null;
+      } else {
+        throw new GraphQLError('Session doesn\'t exist', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
     }
   }
 };

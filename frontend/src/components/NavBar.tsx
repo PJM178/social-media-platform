@@ -1,4 +1,8 @@
+import { useApolloClient } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { useUserInfo } from '../hooks/useUserInfo';
+import { useMutation } from '@apollo/client';
+import { LOGOUT } from '../mutations/user';
 
 interface ThemeProps {
   theme: string | null
@@ -6,9 +10,24 @@ interface ThemeProps {
 }
 
 const NavBar = ({ theme, setTheme }: ThemeProps) => {
+  const client = useApolloClient();
+  const { name, resetUserInfo } = useUserInfo();
+  const [logout, { data, loading, error }] = useMutation(LOGOUT,{
+    onError: (error) => {
+      console.log(error);
+    }
+  });
 
   const handleTheme = (theme: string) => {
     setTheme(theme);
+  };
+
+  const handleSignOut = async () => {
+    await logout();
+    console.log(data, loading, error);
+    client.resetStore();
+    resetUserInfo();
+    console.log('sign out');
   };
 
   return (
@@ -18,10 +37,13 @@ const NavBar = ({ theme, setTheme }: ThemeProps) => {
           <div className='logo'>PURO</div>
         </div>
         <div className='nav-link-container'>
-          <div className='nav-link'><Link to='/register' state={{ state: 'register' }}>Register</Link></div>
-          <div className='nav-link'>Profile</div>
+          {!name && <div className='nav-link'><Link to='/register' state={{ state: 'register' }}>Register</Link></div>}
+          {name && <div className='nav-link'>Profile</div>}
           {/* <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div> */}
-          <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div>
+          {name
+            ? <div className='nav-link' onClick={() => handleSignOut()}>Sign out</div>
+            : <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div>
+          }
           <div className='theme-container'>
             {theme === 'light' || theme === null
               ? <img className='theme' onClick={() => handleTheme('dark')} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABOCAYAAACOqiAdAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFKklEQVR4nO2bWYhcRRSGK6MouAVNomYE11Ghcbpv/X/dnnEgzoMbEtCgtiCCiMuby4Mg7gu4RAQJefDBhbi/KEQwgtGRSFAfNO5ENEERDIqJOpPgJNE4GTn0HWnaU3fu9DrTtz6ol7613b+rTp06VdeYQCAQCAQCgUAgEAgEAoFWE0XRMmvtuSQvJFlxzl0wOjp6aMsbWuiQLJO8h+QYyT9ITivpU5KLTd4ZGho6AcD9JLd7hNLS7SavkFwOYC2AvXMQbCY9YfJGpVI5hOQtJCcaEGwawD9i90yeKJVKJ5Hc3IhgSdpFcqXJE865UZI7mxBti7W23+QJkqsA7EsRZQrA6yTXe6bnh+Vy+RiTQ9EOpNist5xzZ4vPBmC38vwHeWbyNj3hH2kTzrnrZ/KSfEzJcxDACpPDhWCnZ5R9b60dqFtpdyh5nzd5olIVwrd6fiE+XG1+2UppbkcURWeaPMGqn6aJtn14ePi4+vwAHlfyjpk8EcfxiZpzC2BPFEUFrQyATYpwN5s8AWCtx65d5SujCW2tdSZnG/a9inBv+8oMDAwc7pnWR5i8QPI+RYC/4jg+a5apXV9mv8kRizyhoXVphUierEzrfVKfyVEQcloRYTitnKyyWjlt9e1JWI3c/s9ny1C0T9tdOOfOMXmA1XB3/Wh7OGPZrxTRbzR5AMDvinAXZyz7nCLcm6bXiaJomfLiU1lDQQCu0RaInrdzJIcU4X7NWl4E9vh/bT9bsNaeR/Ipkg8Vi8XjTScheZHy0lvnWMdL2qiz1p7Sxn6vlGBCTXvfikNuOoW19nJFuM1zqYPkoMTfFPE+aMfLSNgLwG+N2uW2CQdg01zrIfmKZ/uV6kQ30M7i5GBba2tVK9tqZKp+0kA9y1OODde1YuSJHSP5kacNCS6cb7q5OAD4qcG6Kr6XkkObZmxeshD86Ks/STCdguRSpQMHC4XCUQ3Wp50//LdgyGo7F1dFDoMkDK/ZUCV19l4KFEMr/3ATAYOn014wEXADgJtke1YrZLFYPNI5F5O8NQmSTmUQTOr8xXQaAO8qHXmgiSpFvEezvHCdmPvnUqYubTCdBsDdyot81my9zrkrSI43Icb0vL4F5apTQ+vMYLN1J6vtyxlt1GyjcjeA17Rn1tqi6QKLSG5TOvpsqxoQWwbgxQavhu1Ipv5SAK8q/fzazLfQealUOrWV7cjeluTVJJ+RmJ/ntsCELAwAVie+WZ+UlYPw2m1WTbrDdIti1bmcVDq1vs1N9w0ODh4rf5BM60KhcJgvo4SrlNG2p+uRGJJrtKkiRr6rHasuYNd57N7qeXFESH0VHC+Xy6d1q18kz/D0a1fXR9sMcgrvMdDbOh7zSgKtAL7z9OkGM58u3UC/1iDT4uM4jpd0qi8ymgB87hFt48yiMW+w1vZLFNjT4W+cc6e3uw9yVyXlM4CfuzH6MwFgRYrPJfbmyna1LVEW7YZnkiZnO+/tOs65S2e5yvpGK/28JBKyMaW9Awvm5jrJy2a5PP23HBE2s+WRbx8AvCAOd0o7kwtGtNppm2Lz6m9sPighqZGRkaNNyu7BOXcJyUdIfpklZLRgPyyx1vYDeL+BPeYWku8l12O3Jn9AphhbksbEvzQLnD6S12qBzzakcQC3iXtkeoWh6g5jjWdv22z6E8CTPf19RLEaGLg3xbPPnORAWW5N9bRgGnLvF8BdAN7JMpUlj+QleScAqpXmkTiOl0hkOfkOojLzebn81sltWyAQCAQCgUAgEAgEAgGTH/4FhS+G66NUF6IAAAAASUVORK5CYII=" />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router';
+import { useUserInfo } from './hooks/useUserInfo';
 
 import HomePage from './components/HomePage';
 import SigninForm from './components/SigninForm';
@@ -9,7 +10,8 @@ import PostForm from './components/PostForm';
 
 const App = () => {
   const [theme, setTheme] = useState<string | null>(window.localStorage.getItem('theme'));
-
+  const { username, likedPosts } = useUserInfo();
+  console.log(username, likedPosts);
   useEffect(() => {
     if (theme) {
       document.documentElement.setAttribute('data-theme', theme);

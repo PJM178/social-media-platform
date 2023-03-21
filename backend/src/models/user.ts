@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 
 import { sequelize } from '../utilities/db';
+import { LikedPost } from '../types/post';
 
 class User extends Model {
   declare id: string;
@@ -11,6 +12,7 @@ class User extends Model {
   declare admin: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
+  declare likedPosts?: LikedPost[] | [];
 }
 
 User.init({

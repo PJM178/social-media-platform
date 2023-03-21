@@ -4,12 +4,14 @@ import * as yup from 'yup';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useMutation } from '@apollo/client';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 import { UserSignIn } from '../types/user';
 import { LOGIN } from '../mutations/user';
 
 const SigninForm = () => {
   const navigate = useNavigate();
+  const { setName, setUserId, setUsername, setLikedPosts } = useUserInfo();
 
   const [login, { data, loading, error }] = useMutation(LOGIN, {
     onError: (error) => {
@@ -42,6 +44,10 @@ const SigninForm = () => {
     if (data && isSubmitSuccessful) {
       // reset();
       console.log(data, loading);
+      setName(data.login.name);
+      setUserId(data.login.id);
+      setUsername(data.login.username);
+      setLikedPosts(data.login.likedPosts);
       navigate('/');
     }
   }, [formState, reset]);
