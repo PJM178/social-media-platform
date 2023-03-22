@@ -22,7 +22,8 @@ const userTypeDefs = `
 
   type Query {
     allUsers: [User]
-    singleUser(id: Int): User 
+    singleUser(id: Int): User
+    loginOnLoad: User
   }
 
   type Mutation {

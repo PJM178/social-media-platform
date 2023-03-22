@@ -14,6 +14,20 @@ export const LOGIN = gql`
   }
 `;
 
+export const LOGIN_ON_LOAD = gql`
+  mutation LoginOnLoad {
+    loginOnLoad {
+      name
+      id
+      username
+      likedPosts {
+        postId
+        userId
+      }
+    }
+  }
+`;
+
 export const LOGOUT = gql`
   mutation Logout {
     logout {

@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router';
 import { useUserInfo } from './hooks/useUserInfo';
+import { useMutation, useQuery } from '@apollo/client';
 
 import HomePage from './components/HomePage';
 import SigninForm from './components/SigninForm';
 import Header from './components/Header';
 import SidePanel from './components/SidePanel';
 import PostForm from './components/PostForm';
+import { LOGIN_ON_LOAD } from './queries/user';
 
 const App = () => {
   const [theme, setTheme] = useState<string | null>(window.localStorage.getItem('theme'));
-  const { username, likedPosts } = useUserInfo();
+  const { username, likedPosts, setName, setLikedPosts, setUserId, setUsername } = useUserInfo();
+
+  const { loading, error, data } = useQuery(LOGIN_ON_LOAD, {
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   console.log(username, likedPosts);
   useEffect(() => {
     if (theme) {
@@ -19,6 +28,19 @@ const App = () => {
     }
   }, [theme]);
 
+  useEffect(() => {
+    // loginOnLoad();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setName(data.loginOnLoad.name);
+      setUserId(data.loginOnLoad.id);
+      setUsername(data.loginOnLoad.username);
+      setLikedPosts(data.loginOnLoad.likedPosts);
+    }
+  }, [data]);
+  console.log('app', loading);
   return (
     <div>
       <Header theme={theme} setTheme={setTheme} />

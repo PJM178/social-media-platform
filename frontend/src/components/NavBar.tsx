@@ -4,12 +4,12 @@ import { useUserInfo } from '../hooks/useUserInfo';
 import { useMutation } from '@apollo/client';
 import { LOGOUT } from '../mutations/user';
 
-interface ThemeProps {
+interface NavBarProps {
   theme: string | null
   setTheme: (theme: string) => void
 }
 
-const NavBar = ({ theme, setTheme }: ThemeProps) => {
+const NavBar = ({ theme, setTheme }: NavBarProps) => {
   const client = useApolloClient();
   const { name, resetUserInfo } = useUserInfo();
   const [logout, { data, loading, error }] = useMutation(LOGOUT,{
@@ -17,7 +17,7 @@ const NavBar = ({ theme, setTheme }: ThemeProps) => {
       console.log(error);
     }
   });
-
+  console.log('navbar');
   const handleTheme = (theme: string) => {
     setTheme(theme);
   };
@@ -41,7 +41,7 @@ const NavBar = ({ theme, setTheme }: ThemeProps) => {
           {name && <div className='nav-link'>Profile</div>}
           {/* <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div> */}
           {name
-            ? <div className='nav-link' onClick={() => handleSignOut()}>Sign out</div>
+            ? <div className='nav-link sign-out-button' onClick={() => handleSignOut()}>Sign out</div>
             : <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div>
           }
           <div className='theme-container'>
@@ -51,7 +51,6 @@ const NavBar = ({ theme, setTheme }: ThemeProps) => {
             }
           </div>
         </div>
-
       </div>
     </nav>
   );

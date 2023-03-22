@@ -13,3 +13,17 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const LOGIN_ON_LOAD = gql`
+  query LoginOnLoad {
+    loginOnLoad {
+      name
+      id
+      username
+      likedPosts {
+        postId
+        userId
+      }
+    }
+  }
+`;

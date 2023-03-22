@@ -33,7 +33,43 @@ export const userResolvers = {
     allLikedPosts: async () => {
       const likedPosts = await LikedPost.findAll({});
       return likedPosts;
-    }
+    },
+    loginOnLoad: async (_root: undefined, _args: undefined, { req }: Cookies) => {
+      const token = cookie.parse(req.headers.cookie as string).session;      
+      if (token) {
+        const sessionToken = await Session.findOne({ where: { userToken: token } });
+        if (sessionToken) {
+          const user = await User.findByPk(sessionToken.userId);
+          if (user) {
+            const returnedUser = {
+              id: user.id,
+              username: user.username,
+              name: user.name,
+              likedPosts: user.likedPosts,
+            };
+            return { ...returnedUser };
+          } else {
+            throw new GraphQLError('User not found', {
+              extensions: {
+                code: 'INTERNAL_SERVER_ERROR'
+              }
+            });
+          }
+        } else {
+          throw new GraphQLError('Missing session token', {
+            extensions: {
+              code: 'FORBIDDEN'
+            }
+          });
+        }
+      } else {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+    },
   },
   Mutation: {
     createUser: async (_root: undefined, args: UserEntry, context: string) => {
@@ -51,8 +87,7 @@ export const userResolvers = {
       const user = await User.create(newUser);
       return user;
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    login: async (_root: undefined, args: UserLogin, { req, res }: Cookies) => {
+    login: async (_root: undefined, args: UserLogin, { res }: Cookies) => {
       const user = await User.findOne({ 
         where: { username: args.username },
         include: {
@@ -61,9 +96,10 @@ export const userResolvers = {
           as: 'likedPosts',
         },
       });
-      console.log(user);
-      const cookies = req.headers.cookie;
-      console.log(cookie.parse(cookies as string).token);
+
+      // console.log(user);
+      // const cookies = req.headers.cookie;
+      // console.log(cookie.parse(cookies as string).token);
 
       const checkPassword = user === null
         ? false
@@ -85,8 +121,11 @@ export const userResolvers = {
         });
       }
 
-      const userForToken = {
-        id: user.id
+      const objectForToken = {
+        nothing: 'nothing',
+        to: 'to',
+        see: 'see',
+        here: 'here',
       };
 
       const returnedUser = {
@@ -96,7 +135,7 @@ export const userResolvers = {
         likedPosts: user.likedPosts,
       };
 
-      const token = jwt.sign(userForToken, process.env.SECRET as string);
+      const token = jwt.sign(objectForToken, process.env.SECRET as string);
 
       const checkSession = await Session.findOne({ where: { user_id: user.id } });
       if (checkSession) {
@@ -106,17 +145,17 @@ export const userResolvers = {
         await Session.create({ userToken: token, userId: user.id });
       }
 
-      res.cookie('token', token, 
+      res.cookie('session', token, 
         {
           maxAge: 1000*60*60*24,
           httpOnly: true,
         }
       );
-      console.log(returnedUser);
+
       return { ...returnedUser };
     },
     logout: async (_root: undefined, _args: undefined, { req, res }: Cookies) => {
-      const token = cookie.parse(req.headers.cookie as string).token;
+      const token = cookie.parse(req.headers.cookie as string).session;
       console.log('logout', token);
       if (!token) {
         throw new GraphQLError('Missing token', {
@@ -137,6 +176,6 @@ export const userResolvers = {
           }
         });
       }
-    }
+    },
   }
 };

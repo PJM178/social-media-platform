@@ -139,3 +139,8 @@ aside {
   font-weight: bold;
   margin-right: 1rem;
 }
+
+.sign-out-button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

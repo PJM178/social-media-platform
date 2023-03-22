@@ -4,7 +4,7 @@ import { sequelize } from '../utilities/db';
 import { LikedPost } from '../types/post';
 
 class User extends Model {
-  declare id: string;
+  declare id: number;
   declare username: string;
   declare name: string;
   declare passwordHash: string;

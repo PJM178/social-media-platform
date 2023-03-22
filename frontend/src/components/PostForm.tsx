@@ -10,16 +10,17 @@ const PostForm = () => {
   const userId = 3;
 
   const [addPost, { data, loading, error }] = useMutation(ADD_POST, {
-    refetchQueries: [{ query: GET_ALL_POSTS }]
+    refetchQueries: [{ query: GET_ALL_POSTS }],
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   console.log(data, loading, error);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     await addPost({ variables: { content, title, userId } });
-
     setContent('');
     setTitle('');
   };
