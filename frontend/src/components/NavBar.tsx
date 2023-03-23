@@ -25,6 +25,7 @@ const NavBar = ({ theme, setTheme }: NavBarProps) => {
   const handleSignOut = async () => {
     await logout();
     console.log(data, loading, error);
+    window.localStorage.removeItem('userLoggedIn');
     client.resetStore();
     resetUserInfo();
     console.log('sign out');
@@ -37,6 +38,7 @@ const NavBar = ({ theme, setTheme }: NavBarProps) => {
           <div className='logo'>PURO</div>
         </div>
         <div className='nav-link-container'>
+          {/* {userLoading && <div className='loading nav-link'>...</div>} */}
           {!name && <div className='nav-link'><Link to='/register' state={{ state: 'register' }}>Register</Link></div>}
           {name && <div className='nav-link'>Profile</div>}
           {/* <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div> */}

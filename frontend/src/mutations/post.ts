@@ -22,10 +22,12 @@ export const EDIT_LIKES = gql`
   mutation EditLikes(
     $id: ID, 
     $type: String
+    $userId: String
   ) { 
     editLikes(
     id: $id, 
-    type: $type
+    type: $type,
+    userId: $userId
     )
   }
 `;

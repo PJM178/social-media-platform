@@ -14,16 +14,11 @@ export const LOGIN = gql`
   }
 `;
 
-export const LOGIN_ON_LOAD = gql`
-  mutation LoginOnLoad {
-    loginOnLoad {
+export const CREATE_USER = gql`
+  mutation CreateUser($username: String!, $password: String!, $name: String!) {
+    createUser(username: $username, password: $password, name: $name) {
       name
-      id
       username
-      likedPosts {
-        postId
-        userId
-      }
     }
   }
 `;

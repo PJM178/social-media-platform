@@ -39,7 +39,12 @@ export const userResolvers = {
       if (token) {
         const sessionToken = await Session.findOne({ where: { userToken: token } });
         if (sessionToken) {
-          const user = await User.findByPk(sessionToken.userId);
+          const user = await User.findByPk(sessionToken.userId, {
+            include: {
+              model: LikedPost,
+              as: 'likedPosts',
+            }
+          });
           if (user) {
             const returnedUser = {
               id: user.id,
@@ -167,7 +172,7 @@ export const userResolvers = {
       const sessionToken = await Session.findOne({ where: { userToken: token } });
       if (sessionToken) {
         await sessionToken.destroy();
-        res.clearCookie('token');
+        res.clearCookie('session');
         return null;
       } else {
         throw new GraphQLError('Session doesn\'t exist', {

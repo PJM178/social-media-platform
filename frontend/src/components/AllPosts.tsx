@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
 
 import { GET_ALL_POSTS } from '../queries/post';
-import { PostType, UserProps } from '../types/post';
+import { PostType } from '../types/post';
 import Post from './Post';
 
-const AllPosts = ({ user }: UserProps) => {
+const AllPosts = () => {
   const { loading, error, data } = useQuery(GET_ALL_POSTS);
   console.log(data);
 
@@ -23,7 +23,7 @@ const AllPosts = ({ user }: UserProps) => {
   return (
     <section className='post-container'>
       {data ? data.allPosts?.map((post: PostType) => (
-        <Post key={post.id} post={post} user={user} />
+        <Post key={post.id} post={post} />
       )) : null}
     </section>
   );

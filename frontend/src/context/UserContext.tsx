@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useState } from 'react';
 
 interface LikedPost {
-  postId: number
-  userId: number
+  postId: number | null
+  userId: number | null
 }
 
 interface UserContextProps {

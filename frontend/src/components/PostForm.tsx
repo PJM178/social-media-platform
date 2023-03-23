@@ -3,11 +3,13 @@ import { useMutation } from '@apollo/client';
 
 import { ADD_POST } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 const PostForm = () => {
+  const { userId } = useUserInfo();
   const [content, setContent] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const userId = 3;
+  console.log(userId);
 
   const [addPost, { data, loading, error }] = useMutation(ADD_POST, {
     refetchQueries: [{ query: GET_ALL_POSTS }],
@@ -20,7 +22,7 @@ const PostForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await addPost({ variables: { content, title, userId } });
+    await addPost({ variables: { content, title, userId: Number(userId) } });
     setContent('');
     setTitle('');
   };
