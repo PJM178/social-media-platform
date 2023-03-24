@@ -115,7 +115,7 @@ export const postResolvers = {
             if (Number(decrementResult[0][1]) === Number(1)) {
               try {
                 await likedPost.destroy();
-                return { type: 'dec', message: 'You disliked the post...' };
+                return { type: 'dec', message: 'You disliked the post...', post: { ...decrementResult[0][0][0 as unknown as keyof Post] as Post } };
               } catch (e) {
                 console.log(e);
                 throw new GraphQLError('Error: failed to save to the database');
