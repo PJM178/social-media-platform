@@ -12,6 +12,7 @@ const postTypeDefs = `
 
   type Query {
     allPosts: [Post]
+    singlePost(id: Int!): Post
   }
 
   type Mutation {
@@ -25,7 +26,7 @@ const postTypeDefs = `
       id: ID,
       type: String,
       userId: String
-    ): String
+    ): likedPostResponse
   }
 `;
 

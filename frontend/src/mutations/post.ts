@@ -28,6 +28,15 @@ export const EDIT_LIKES = gql`
     id: $id, 
     type: $type,
     userId: $userId
-    )
+    ) {
+      type
+      message
+      post {
+        title
+        content
+        id
+        likes
+      }
+    }
   }
 `;

@@ -20,9 +20,9 @@ const PostForm = () => {
 
   console.log(data, loading, error);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await addPost({ variables: { content, title, userId: Number(userId) } });
+    addPost({ variables: { content, title, userId: Number(userId) } });
     setContent('');
     setTitle('');
   };

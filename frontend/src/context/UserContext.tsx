@@ -40,6 +40,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     setUserId(null),
     setUsername(null),
     setName(null);
+    setLikedPosts([]);
   };
 
   const defaultValues: UserContextProps = {

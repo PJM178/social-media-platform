@@ -77,8 +77,7 @@ export const userResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_root: undefined, args: UserEntry, context: string) => {
-      console.log(context);
+    createUser: async (_root: undefined, args: UserEntry) => {
       const { username, name, password } = args;
       const saltRounds = 10;
       const passwordHash: string = await bcrypt.hash(password, saltRounds);

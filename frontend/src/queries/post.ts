@@ -13,3 +13,17 @@ export const GET_ALL_POSTS = gql`
     }
   }
 `;
+
+export const SINGLE_POST = gql`
+  query SinglePost($id: Int!) {
+    singlePost(id: $id) {
+      title
+      content
+      id
+      likes
+      user {
+        username
+      }
+    }
+  }
+`;

@@ -17,12 +17,13 @@ const App = () => {
   const { username, likedPosts, setName, setLikedPosts, setUserId, setUsername } = useUserInfo();
 
   const { loading, error, data } = useQuery(LOGIN_ON_LOAD, {
+    skip: username !== null,
     onError: (error) => {
       console.log(error);
     },
   });
 
-  console.log(username, likedPosts);
+  console.log('app', username, likedPosts);
   useEffect(() => {
     if (theme) {
       document.documentElement.setAttribute('data-theme', theme);
@@ -72,7 +73,6 @@ const App = () => {
   } else {
     return <div style={{ display: 'flex', justifyContent: 'center' }}><div style={{ marginTop: '100px' }} className='loading'>...</div></div>;
   }
-
 };
 
 export default App;

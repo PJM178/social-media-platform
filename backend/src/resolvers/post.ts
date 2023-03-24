@@ -10,7 +10,7 @@ export const postResolvers = {
     allPosts: async () => {
       const posts = await Post.findAll({
         order: [
-          ['updatedAt', 'DESC']
+          ['createdAt', 'DESC']
         ],
         include: {
           model: User,
@@ -26,8 +26,26 @@ export const postResolvers = {
           // },
         },
       });
-
       return posts;
+    },
+    singlePost: async (_root: undefined, args: { id: number }) => {
+      const { id } = { ...args };
+      console.log('singlepost');
+      const post = await Post.findByPk(id,{
+        include: {
+          model: User,
+          attributes: { include: ['username'] },
+        },
+      });
+      if (post) {
+        return post;
+      } else {
+        throw new GraphQLError('User not found', {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR'
+          }
+        });
+      }
     },
   },
   Mutation: {
@@ -57,17 +75,20 @@ export const postResolvers = {
       const { id, type, userId } = { ...args };
       if (type === 'inc') {
         const likedPost = await LikedPost.findOne({ where: { userId: userId, postId: id } });
+        console.log('liking the post', id, type, userId);
+        console.log(likedPost);
         if (!likedPost) {
           try {
             const incrementResult = await Post.increment('likes', 
               { by: 1, where: { id: id } }
             );
             console.log(incrementResult[0][1]);
+            console.log(incrementResult[0][0][0 as unknown as keyof Post].title);
+            console.log({ ...incrementResult[0][0][0 as unknown as keyof Post] });
             if (Number(incrementResult[0][1]) === Number(1)) {
               try {
                 await LikedPost.create({ userId: userId, postId: id });
-                console.log('test');
-                return 'Successfully liked the post!';
+                return { type: 'inc', message: 'Successfully liked the post!', post: { ...incrementResult[0][0][0 as unknown as keyof Post] as Post }  };
               } catch (error) {
                 console.log(error);
                 throw new GraphQLError('Error: failed to save to the database');
@@ -82,18 +103,31 @@ export const postResolvers = {
           throw new GraphQLError('Already liked the post');
         }
       } else if (type === 'dec') {
-        try {
-          const decrementResult = await Post.decrement('likes', 
-            { by: 1, where: { id: id } }
-          );
-          console.log(decrementResult[0][1]);
-          if (Number(decrementResult[0][1]) === Number(1)) {
-            return 'Successfully decremented likes';
-          } else {
-            return 'Failed to decrement likes';
+        console.log('dec');
+        const likedPost = await LikedPost.findOne({ where: { userId: userId, postId: id } });
+        console.log(likedPost);
+        if (likedPost) {
+          try {
+            const decrementResult = await Post.decrement('likes', 
+              { by: 1, where: { id: id } }
+            );
+            console.log(decrementResult[0][1]);
+            if (Number(decrementResult[0][1]) === Number(1)) {
+              try {
+                await likedPost.destroy();
+                return { type: 'dec', message: 'You disliked the post...' };
+              } catch (e) {
+                console.log(e);
+                throw new GraphQLError('Error: failed to save to the database');
+              }
+            } else {
+              throw new GraphQLError('Error: failed to dislike the post');
+            }
+          } catch (e) {
+            throw new GraphQLError('Error: failed to dislike the post');
           }
-        } catch (e) {
-          throw new GraphQLError('Failed to increment likes');
+        } else {
+          throw new GraphQLError('Already disliked the post');
         }
       } else {
         throw new GraphQLError('Something went wrong', {
