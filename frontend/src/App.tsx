@@ -21,6 +21,12 @@ const App = () => {
     onError: (error) => {
       console.log(error);
     },
+    onCompleted: (data) => {
+      setName(data.loginOnLoad.name);
+      setUserId(data.loginOnLoad.id);
+      setUsername(data.loginOnLoad.username);
+      setLikedPosts(data.loginOnLoad.likedPosts);
+    }
   });
 
   console.log('app', username, likedPosts);
@@ -31,15 +37,15 @@ const App = () => {
     }
   }, [theme]);
 
-  useEffect(() => {
-    if (data) {
-      setName(data.loginOnLoad.name);
-      setUserId(data.loginOnLoad.id);
-      setUsername(data.loginOnLoad.username);
-      setLikedPosts(data.loginOnLoad.likedPosts);
-      console.log('context');
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setName(data.loginOnLoad.name);
+  //     setUserId(data.loginOnLoad.id);
+  //     setUsername(data.loginOnLoad.username);
+  //     setLikedPosts(data.loginOnLoad.likedPosts);
+  //     console.log('context');
+  //   }
+  // }, [data]);
   console.log('app', loading, data, error);
 
   if (username) {

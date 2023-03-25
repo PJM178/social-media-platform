@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import { useState } from 'react';
 
 import { EDIT_LIKES } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
@@ -7,12 +8,15 @@ import { useUserInfo } from '../hooks/useUserInfo';
 
 const LikingPost = ({ post }: PostProps) => {
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
+  const [likes, setLikes] = useState<number>(0);
 
   const [editLikes, { data, loading, error }] = useMutation(EDIT_LIKES, {
     onCompleted: (data) => {
       if (data.editLikes.type === 'inc') {
+        setLikes(data.editLikes.post.likes);
         setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
       } else {
+        setLikes(data.editLikes.post.likes);
         setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
       }
     },
@@ -20,6 +24,19 @@ const LikingPost = ({ post }: PostProps) => {
     onError: (error) => {
       console.log(error);
     },
+    optimisticResponse: {
+      editLikes: {
+        message: 'Successfully like the post!',
+        post: {
+          title: 'jormamies',
+          likes: 9,
+          id: post.id,
+          content: 'jep'
+        },
+        type: 'inc',
+        __typename: 'likedPostResponse'
+      }
+    }
     // optimisticResponse: {
     //   editLikes: {
     //     __typename: 'likedPostResponse',
@@ -63,9 +80,19 @@ const LikingPost = ({ post }: PostProps) => {
   console.log(Number(post.id));
   console.log(likedPosts.some(likedPost => likedPost.postId === Number(post.id)));
   if (likedPosts.some(likedPost => likedPost.postId === Number(post.id))) {
-    return <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>;
+    return (
+      <>
+        <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
+        <div>{likes}</div>
+      </>
+    );
   } else {
-    return <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>;
+    return (
+      <>
+        <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>
+        <div>{likes}</div>
+      </>
+    );
   }
 };
 

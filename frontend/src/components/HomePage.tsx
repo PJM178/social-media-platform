@@ -8,8 +8,8 @@ const HomePage = () => {
 
   return (
     <div>
-      <AllPosts />
       <PostForm />
+      <AllPosts />
     </div>
   );
 };
