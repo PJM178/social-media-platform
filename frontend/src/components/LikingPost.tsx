@@ -6,91 +6,99 @@ import { GET_ALL_POSTS } from '../queries/post';
 import { PostProps, PostType } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
+// Types
+interface CacheUserType {
+  username: string | null
+  __typename: string
+}
+
+interface CachePostType {
+  content: string
+  id: number
+  likes: number
+  title: string
+  user: CacheUserType
+  __typename: string
+}
+
+interface CacheDataType {
+  allPosts: CachePostType[]
+}
+
 const LikingPost = ({ post }: PostProps) => {
-  const { likedPosts, userId, setLikedPosts } = useUserInfo();
-  const [likes, setLikes] = useState<number>(0);
+  const { username, likedPosts, userId, setLikedPosts } = useUserInfo();
 
   const [editLikes, { data, loading, error }] = useMutation(EDIT_LIKES, {
-    onCompleted: (data) => {
-      if (data.editLikes.type === 'inc') {
-        setLikes(data.editLikes.post.likes);
-        setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
-      } else {
-        setLikes(data.editLikes.post.likes);
-        setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
-      }
-    },
-    // refetchQueries: [{ query: GET_ALL_POSTS }],
+    refetchQueries: [{ query: GET_ALL_POSTS }],
     onError: (error) => {
       console.log(error);
     },
-    optimisticResponse: {
-      editLikes: {
-        message: 'Successfully like the post!',
-        post: {
-          title: 'jormamies',
-          likes: 9,
-          id: post.id,
-          content: 'jep'
-        },
-        type: 'inc',
-        __typename: 'likedPostResponse'
+    update: (store, { data: { editLikes } }) => {
+      const data: CacheDataType | null = store.readQuery({ query: GET_ALL_POSTS });
+      if (editLikes.type === 'inc') {
+        console.log(data?.allPosts.findIndex(posts => Number(posts.id) === Number(post.id)));
+        const postIndex = data?.allPosts.findIndex(posts => Number(posts.id) === Number(post.id));
+        const editedPost = { ...post, likes: post.likes + 1 };
+        if (typeof postIndex === 'number') {
+          const dataToSplice = { allPosts: [...data?.allPosts || []] };
+          dataToSplice.allPosts.splice(postIndex, 1, editedPost);
+          store.writeQuery({ query: GET_ALL_POSTS, data: dataToSplice });
+        }
+      } else if (editLikes.type === 'dec') {
+        const postIndex = data?.allPosts.findIndex(posts => Number(posts.id) === Number(post.id));
+        const editedPost = { ...post, likes: post.likes - 1 };
+        if (typeof postIndex === 'number') {
+          const dataToSplice = { allPosts: [...data?.allPosts || []] };
+          dataToSplice.allPosts.splice(postIndex, 1, editedPost);
+          store.writeQuery({ query: GET_ALL_POSTS, data: dataToSplice });
+        }
       }
-    }
-    // optimisticResponse: {
-    //   editLikes: {
-    //     __typename: 'likedPostResponse',
-    //     message: 'You Disliked the post...',
-    //     post: {
-    //       title: 'jormamies',
-    //       id: post.id,
-    //       content: 'jep',
-    //       likes: -9
-    //     },
-    //     type: 'dec'
-    //   }
-    // },
-    // update: (cache, { data }) => {
-    //   cache.updateQuery({ query: GET_ALL_POSTS }, ({ allPosts }) => {
-    //     // const cachePost = allPosts.find((posts: { id: string }) => posts.id === data.editLikes.post.id);
-    //     // const newPost = { ...cachePost, likes: 7 };
-    //     console.log('cache', allPosts);
-    //     // console.log('cache new post', newPost);
-    //     console.log('cache data', data);
-    //     // console.log('cache data', data.editLikes.post.id);
-    //     // console.log('cache post', cachePost);
-    //     // const filteredPosts = allP
-    //     // return {
-    //     //   allPosts: allPosts
-    //     // };
-    //   });
-    // },
+    },
   });
-
-  console.log('liking posts', data, loading);
 
   const handleLikePost = (direction: 'dec' | 'inc') => {
     if (direction === 'inc' && !loading) {
-      editLikes({ variables: { id: post.id, type: direction, userId: userId } });
-    } else if (!loading){
-      editLikes({ variables: { id: post.id, type: direction, userId: userId } });
+      setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
+      editLikes({ variables: { id: post.id, type: direction, userId: userId },
+        optimisticResponse: {
+          editLikes: {
+            // id: 'tempId',
+            // userId: userId,
+            type: direction,
+            message: '',
+            post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
+            __typename: 'likedPostResponse'
+          },
+        },
+      });
+    } else if (!loading) {
+      setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
+      editLikes({ variables: { id: post.id, type: direction, userId: userId },
+        optimisticResponse: {
+          editLikes: {
+            // id: 'tempId',
+            // userId: userId,
+            type: direction,
+            message: '',
+            post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
+            __typename: 'likedPostResponse'
+          },
+        },
+      });
     }
   };
-  console.log(likedPosts);
-  console.log(Number(post.id));
-  console.log(likedPosts.some(likedPost => likedPost.postId === Number(post.id)));
+
+  // Check the likedPosts array from context
   if (likedPosts.some(likedPost => likedPost.postId === Number(post.id))) {
     return (
       <>
         <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
-        <div>{likes}</div>
       </>
     );
   } else {
     return (
       <>
         <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>
-        <div>{likes}</div>
       </>
     );
   }

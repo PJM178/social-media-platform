@@ -5,8 +5,9 @@ import { ADD_POST } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
+// Types
 interface UserType {
-  username: string
+  username: string | null
   __typename: string
 }
 
@@ -35,15 +36,15 @@ const PostForm = () => {
       console.log(error);
     },
     update: (store, { data: { addPost } }) => {
+      // Updating the cache manually along with optimistic response so that the UI
+      // updates immediately. The shape of the added object
+      // needs to be the same as the data.
       const data: DataType | null = store.readQuery({ query: GET_ALL_POSTS });
-      console.log(data);
-      addPost = { ...addPost, id: 'temp-id', likes: 0, user: { __typename: 'User', username: username } };
-      console.log('update', data?.allPosts);
-      console.log('update', addPost);
+      // Making the added object to the cached data the correct shape
+      // Refetching the queries corrects the id.
+      addPost = { ...addPost, id: 'tempId', likes: 0, user: { __typename: 'User', username: username } };
+      console.log(addPost);
       const newData: DataType = { allPosts: [addPost, ...(data?.allPosts || [])] };
-      console.log(newData);
-      // data && (data.allPosts = [...newData, addPost]);
-      console.log('update post push', data);
       store.writeQuery({ query: GET_ALL_POSTS, data: newData });
     }
   });
@@ -53,11 +54,12 @@ const PostForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addPost({ variables: { content, title, userId: Number(userId) },
+    // the data has to be the same shape as the mutation schema
       optimisticResponse: {
         addPost: {
           content: content,
           title: title,
-          id: 'temp-id',
+          id: 'tempId',
           __typename: 'Post',
         },
       },

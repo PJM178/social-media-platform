@@ -8,6 +8,7 @@ export interface UserType {
   name?: string
   id: number
   likedPosts: [LikedPosts]
+  __typename: string
 }
 
 export interface UserProps {
@@ -20,6 +21,7 @@ export interface PostType {
   title: string
   likes: number
   user: UserType
+  __typename: string
 }
 
 export interface PostProps {

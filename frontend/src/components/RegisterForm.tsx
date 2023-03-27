@@ -14,7 +14,9 @@ const RegisterForm = () => {
 
   const [login, { data, loading, error }] = useMutation(LOGIN, {
     onCompleted: (data) => {
-      console.log(data);
+      setUsernameLocal('');
+      setNameLocal('');
+      setPassword('');
       setName(data.login.name);
       setUserId(data.login.id);
       setUsername(data.login.username);
@@ -27,8 +29,7 @@ const RegisterForm = () => {
   });
 
   const [createUser, result] = useMutation(CREATE_USER, {
-    onCompleted: (result) =>{
-      console.log(result.data);
+    onCompleted: () =>{
       login({ variables: { username: usernameLocal, password: password } });
     },
     onError: (error) => {
@@ -39,9 +40,6 @@ const RegisterForm = () => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     createUser({ variables: { name: nameLocal, password: password, username: usernameLocal } });
-    setUsernameLocal('');
-    setNameLocal('');
-    setPassword('');
   };
 
   return (
