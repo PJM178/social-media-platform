@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
 
 import { EDIT_LIKES } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
-import { PostProps, PostType } from '../types/post';
+import { PostProps } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 // Types
@@ -26,12 +25,19 @@ interface CacheDataType {
 }
 
 const LikingPost = ({ post }: PostProps) => {
-  const { username, likedPosts, userId, setLikedPosts } = useUserInfo();
+  const { likedPosts, userId, setLikedPosts } = useUserInfo();
 
-  const [editLikes, { data, loading, error }] = useMutation(EDIT_LIKES, {
+  const [editLikes, { loading, error }] = useMutation(EDIT_LIKES, {
     refetchQueries: [{ query: GET_ALL_POSTS }],
-    onError: (error) => {
+    onError: ({ graphQLErrors }) => {
+      if (graphQLErrors[0].extensions.argumentName === 'inc') {
+        setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
+      } else if (graphQLErrors[0].extensions.argumentName === 'dec') {
+        setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
+      }
       console.log(error);
+      console.log(graphQLErrors[0].extensions.argumentName);
+      console.log(graphQLErrors[0].message);
     },
     update: (store, { data: { editLikes } }) => {
       const data: CacheDataType | null = store.readQuery({ query: GET_ALL_POSTS });
@@ -62,8 +68,6 @@ const LikingPost = ({ post }: PostProps) => {
       editLikes({ variables: { id: post.id, type: direction, userId: userId },
         optimisticResponse: {
           editLikes: {
-            // id: 'tempId',
-            // userId: userId,
             type: direction,
             message: '',
             post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
@@ -76,8 +80,6 @@ const LikingPost = ({ post }: PostProps) => {
       editLikes({ variables: { id: post.id, type: direction, userId: userId },
         optimisticResponse: {
           editLikes: {
-            // id: 'tempId',
-            // userId: userId,
             type: direction,
             message: '',
             post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
@@ -88,19 +90,23 @@ const LikingPost = ({ post }: PostProps) => {
     }
   };
 
-  // Check the likedPosts array from context
-  if (likedPosts.some(likedPost => likedPost.postId === Number(post.id))) {
-    return (
-      <>
-        <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
-      </>
-    );
+  // Check the likedPosts array and if the user exists from context
+  if (userId) {
+    if (likedPosts.some(likedPost => likedPost.postId === Number(post.id))) {
+      return (
+        <>
+          <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>
+        </>
+      );
+    }
   } else {
-    return (
-      <>
-        <div onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>
-      </>
-    );
+    return null;
   }
 };
 

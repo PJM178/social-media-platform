@@ -7,26 +7,34 @@ import { Cookies } from '../types/user';
 
 export const postResolvers = {
   Query: {
-    allPosts: async () => {
-      const posts = await Post.findAll({
-        order: [
-          ['createdAt', 'DESC']
-        ],
-        include: {
-          model: User,
-          attributes: { include: ['username'] },
-          // as: 'userposts',
-          // attributes: ['username'],
-          // through: {
-          //   attributes: []
-          // }
-          // include: {
-          //   model: LikedPosts,
-          //   attributes: { include: ['postId'] }
-          // },
-        },
-      });
-      return posts;
+    allPosts: async (_root: undefined, args: { userId: number }) => {
+      const { userId } = { ...args };
+      if (userId) {
+        const userPosts = await Post.findAll({
+          where: { userId: userId }
+        });
+        return userPosts;
+      } else {
+        const posts = await Post.findAll({
+          order: [
+            ['createdAt', 'DESC']
+          ],
+          include: {
+            model: User,
+            attributes: { include: ['username'] },
+            // as: 'userposts',
+            // attributes: ['username'],
+            // through: {
+            //   attributes: []
+            // }
+            // include: {
+            //   model: LikedPosts,
+            //   attributes: { include: ['postId'] }
+            // },
+          },
+        });
+        return posts;
+      }
     },
     singlePost: async (_root: undefined, args: { id: number }) => {
       const { id } = { ...args };
@@ -71,7 +79,16 @@ export const postResolvers = {
         });
       }
     },
-    editLikes: async (_root: undefined, args: { id: number, type: 'inc' | 'dec', userId: number }) => {
+    editLikes: async (_root: undefined, args: { id: number, type: 'inc' | 'dec', userId: number }, { req }: Cookies) => {
+      const token = cookie.parse(req.headers.cookie as string).session;
+      if (!token) {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN',
+            argumentName: args.type,
+          },
+        });
+      }
       const { id, type, userId } = { ...args };
       if (type === 'inc') {
         const likedPost = await LikedPost.findOne({ where: { userId: userId, postId: id } });
@@ -91,16 +108,32 @@ export const postResolvers = {
                 return { type: 'inc', message: 'Successfully liked the post!', post: { ...incrementResult[0][0][0 as unknown as keyof Post] as Post }  };
               } catch (error) {
                 console.log(error);
-                throw new GraphQLError('Error: failed to save to the database');
+                throw new GraphQLError('Error: failed to save to the database', {
+                  extensions: {
+                    argumentName: args.type,
+                  },
+                });
               }
             } else {
-              throw new GraphQLError('Error: failed to like the post');
+              throw new GraphQLError('Error: failed to like the post', {
+                extensions: {
+                  argumentName: args.type,
+                },
+              });
             }
           } catch (e) {
-            throw new GraphQLError('Error: failed to like the post');
+            throw new GraphQLError('Error: failed to like the post', {
+              extensions: {
+                argumentName: args.type,
+              },
+            });
           }
         } else {
-          throw new GraphQLError('Already liked the post');
+          throw new GraphQLError('Already liked the post', {
+            extensions: {
+              argumentName: args.type,
+            },
+          });
         }
       } else if (type === 'dec') {
         console.log('dec');
@@ -118,21 +151,38 @@ export const postResolvers = {
                 return { type: 'dec', message: 'You disliked the post...', post: { ...decrementResult[0][0][0 as unknown as keyof Post] as Post } };
               } catch (e) {
                 console.log(e);
-                throw new GraphQLError('Error: failed to save to the database');
+                throw new GraphQLError('Error: failed to save to the database', {
+                  extensions: {
+                    argumentName: args.type,
+                  },
+                });
               }
             } else {
-              throw new GraphQLError('Error: failed to dislike the post');
+              throw new GraphQLError('Error: failed to dislike the post', {
+                extensions: {
+                  argumentName: args.type,
+                },
+              });
             }
           } catch (e) {
-            throw new GraphQLError('Error: failed to dislike the post');
+            throw new GraphQLError('Error: failed to dislike the post', {
+              extensions: {
+                argumentName: args.type,
+              },
+            });
           }
         } else {
-          throw new GraphQLError('Already disliked the post');
+          throw new GraphQLError('Already disliked the post', {
+            extensions: {
+              argumentName: args.type,
+            },
+          });
         }
       } else {
         throw new GraphQLError('Something went wrong', {
           extensions: {
-            code: 'BAD_USER_INPUT'
+            code: 'BAD_USER_INPUT',
+            argumentName: args.type,
           },
         });
       }

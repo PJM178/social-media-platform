@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 import { useUserInfo } from './hooks/useUserInfo';
 import { useQuery } from '@apollo/client';
@@ -12,8 +12,10 @@ import SidePanel from './components/SidePanel';
 import PostForm from './components/PostForm';
 import RegisterForm from './components/RegisterForm';
 
+import { useTheme } from './hooks/useTheme';
+
 const App = () => {
-  const [theme, setTheme] = useState<string | null>(window.localStorage.getItem('theme'));
+  const { theme } = useTheme();
   const { username, likedPosts, setName, setLikedPosts, setUserId, setUsername } = useUserInfo();
 
   const { loading, error, data } = useQuery(LOGIN_ON_LOAD, {
@@ -37,21 +39,12 @@ const App = () => {
     }
   }, [theme]);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setName(data.loginOnLoad.name);
-  //     setUserId(data.loginOnLoad.id);
-  //     setUsername(data.loginOnLoad.username);
-  //     setLikedPosts(data.loginOnLoad.likedPosts);
-  //     console.log('context');
-  //   }
-  // }, [data]);
-  console.log('app', loading, data, error);
+  // console.log('app', loading, data, error);
 
   if (username) {
     return (
       <div>
-        <Header theme={theme} setTheme={setTheme} />
+        <Header />
         <SidePanel />
         <Routes>
           <Route path='/new-post' element={<PostForm />} />
@@ -65,7 +58,7 @@ const App = () => {
   } else if (error) {
     return (
       <div>
-        <Header theme={theme} setTheme={setTheme} />
+        <Header />
         <SidePanel />
         <Routes>
           <Route path='/new-post' element={<PostForm />} />

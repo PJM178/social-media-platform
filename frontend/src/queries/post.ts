@@ -27,3 +27,14 @@ export const SINGLE_POST = gql`
     }
   }
 `;
+
+export const USER_POSTS = gql`
+  query UserPosts($userId: Int) {
+    userPosts(userId: $userId) {
+      title
+      content
+      id
+      likes
+    }
+  }
+`;

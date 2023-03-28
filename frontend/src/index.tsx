@@ -9,7 +9,9 @@ import {
   InMemoryCache,
   createHttpLink,
 } from '@apollo/client';
+
 import UserContextProvider from './context/UserContext';
+import ThemeContextProvider from './context/ThemeContext';
 
 const link = createHttpLink({
   uri: 'http://localhost:4000',
@@ -29,9 +31,11 @@ root.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
       <BrowserRouter>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
+        <ThemeContextProvider>
+          <UserContextProvider>
+            <App />
+          </UserContextProvider>
+        </ThemeContextProvider>
       </BrowserRouter>
     </React.StrictMode>
   </ApolloProvider>

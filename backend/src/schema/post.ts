@@ -11,7 +11,7 @@ const postTypeDefs = `
   }
 
   type Query {
-    allPosts: [Post]
+    allPosts(userId: Int): [Post]
     singlePost(id: Int!): Post
   }
 

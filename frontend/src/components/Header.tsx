@@ -1,14 +1,9 @@
 import NavBar from './NavBar';
 
-interface HeaderProps {
-  theme: string | null
-  setTheme: (theme: string) => void
-}
-
-const Header = ({ theme, setTheme }: HeaderProps) => {
+const Header = () => {
   return (
     <header>
-      <NavBar theme={theme} setTheme={setTheme} />
+      <NavBar  />
     </header>
   );
 };
