@@ -32,9 +32,10 @@ const NavBar = () => {
           <div className='logo'>PURO</div>
         </div>
         <div className='nav-link-container'>
+          <div className='nav-link'><Link to='/'>Home</Link></div>
           {/* {userLoading && <div className='loading nav-link'>...</div>} */}
           {!name && <div className='nav-link'><Link to='/register' state={{ state: 'register' }}>Register</Link></div>}
-          {name && <div className='nav-link'>Profile</div>}
+          {name && <div className='nav-link'><Link to='/profile'>Profile</Link></div>}
           {/* <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div> */}
           {name
             ? <div className='nav-link sign-out-button' onClick={() => handleSignOut()}>Sign out</div>

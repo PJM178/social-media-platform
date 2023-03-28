@@ -48,6 +48,9 @@ User.init({
     allowNull: false,
     defaultValue: false,
   },
+  bio: {
+    type: DataTypes.STRING,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

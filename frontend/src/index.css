@@ -36,7 +36,8 @@ html[data-theme='dark-on-load'] {
   --background-color: #fff;
   --color: #121416d8;
   --link-color: #121416d8;
-  --drop-shadow: rgba(0, 0, 0, 0.6)
+  --drop-shadow: rgba(0, 0, 0, 0.6);
+  --button-hover-color: rgba(0, 128, 0, 0.7);
 }
 
 /* End - light and dark color theming */
@@ -158,4 +159,60 @@ aside {
   to {
     clip-path: inset(0 -1ch 0 0)
   }
+}
+
+/* user profile */
+
+.user-profile-container {
+  display: flex;
+  justify-content: center;
+}
+
+.user-profile {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-main-container {
+  display: flex;
+}
+
+.user-profile-main-names {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 0.25em;
+}
+
+.user-profile-buttons {
+  text-align: center;
+}
+
+.user-profile-buttons:hover {
+  cursor: pointer;
+  background-color: var(--button-hover-color)
+}
+
+.grey-text-color {
+  color: rgb(113, 118, 123);
+}
+
+.user-profile-posts-container {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.user-profile-posts {
+  text-align: center;
+}
+
+.user-profile-posts:hover {
+  cursor: pointer;
+  background-color: var(--button-hover-color)
+}
+
+.user-profile-posts-icon {
+  display: inline-block;
+  margin-right: 0.25em;
 }

@@ -11,7 +11,14 @@ export const postResolvers = {
       const { userId } = { ...args };
       if (userId) {
         const userPosts = await Post.findAll({
-          where: { userId: userId }
+          where: { userId: userId },
+          order: [
+            ['createdAt', 'DESC']
+          ],
+          include: {
+            model: User,
+            attributes: { include: ['username'] },
+          },
         });
         return userPosts;
       } else {

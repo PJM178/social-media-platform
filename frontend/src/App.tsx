@@ -11,6 +11,7 @@ import Header from './components/Header';
 import SidePanel from './components/SidePanel';
 import PostForm from './components/PostForm';
 import RegisterForm from './components/RegisterForm';
+import Profile from './components/Profile';
 
 import { useTheme } from './hooks/useTheme';
 
@@ -52,6 +53,7 @@ const App = () => {
           {/* <Route path='/signin' element={<HomePage />} /> */}
           <Route path='/signin' element={<SigninForm />} />
           <Route path='/register' element={<RegisterForm />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </div>
     );
