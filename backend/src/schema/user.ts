@@ -14,6 +14,8 @@ const userTypeDefs = `
     returns null
     """
     likedPosts: [LikedPost]
+    posts: [Post]
+    userLikedPosts: [Post]
   }
 
   type Token {

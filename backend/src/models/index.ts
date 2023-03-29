@@ -13,6 +13,9 @@ LikedPost.belongsTo(User);
 // User.belongsToMany(Post, { through: UserPosts, as: 'userposts' });
 // Post.belongsToMany(User, { through: UserPosts, as: 'userposts' });
 
+User.belongsToMany(Post, { through: LikedPost, as: 'userLikedPosts' });
+Post.belongsToMany(User, { through: LikedPost, as: 'usersliked' });
+
 export {
   Post, User, LikedPost, Session
 };

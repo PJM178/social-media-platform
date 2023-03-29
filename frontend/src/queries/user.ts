@@ -10,6 +10,18 @@ export const GET_USER = gql`
         postId
         userId
       }
+      posts {
+        title
+        content
+        id
+        likes
+      }
+      userLikedPosts {
+        title
+        content
+        id
+        likes
+      }
     }
   }
 `;

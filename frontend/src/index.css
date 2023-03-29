@@ -207,6 +207,11 @@ aside {
   text-align: center;
 }
 
+.user-profile-posts-text {
+  display: inline-block;
+  padding: 5px;
+}
+
 .user-profile-posts:hover {
   cursor: pointer;
   background-color: var(--button-hover-color)
@@ -215,4 +220,10 @@ aside {
 .user-profile-posts-icon {
   display: inline-block;
   margin-right: 0.25em;
+}
+
+.user-profile-selected-category {
+  background-color: green;
+  height: 3px;
+  border-radius: 2px;
 }

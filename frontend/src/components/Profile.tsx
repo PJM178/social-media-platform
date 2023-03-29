@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
 import { USER_POSTS } from '../queries/post';
+import { GET_USER } from '../queries/user';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { PostType } from '../types/post';
 import Post from './Post';
@@ -9,12 +10,17 @@ import Post from './Post';
 const Profile = () => {
   const [displayCategory, setDisplayCategory] = useState<string>('posts');
   const { userId, username, name } = useUserInfo();
-  const { loading, error, data } = useQuery(USER_POSTS, {
+  const userPostsResult = useQuery(USER_POSTS, {
     fetchPolicy: 'cache-and-network',
     variables: { userId: Number(userId) }
   });
 
-  console.log('user posts', loading, error, data);
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { singleUserId: Number(userId) }
+  });
+
+  console.log('single user', loading, error, data);
+  console.log('user posts', userPostsResult.loading, userPostsResult.error, userPostsResult.data);
 
   return (
     <>
@@ -35,13 +41,21 @@ const Profile = () => {
             <div className='user-profile-joined grey-text-color'>joined</div>
           </div>
           <div className='user-profile-posts-container'>
-            <div className='user-profile-posts' onClick={() => setDisplayCategory('posts')}><div className='user-profile-posts-icon'>&#9993;</div>Posts</div>
-            <div className='user-profile-posts' onClick={() => setDisplayCategory('likes')}><div className='user-profile-posts-icon' style={{ color: '#FF006F' }}>&#x2661;</div>Likes</div>
+            <div className='user-profile-posts' onClick={() => setDisplayCategory('posts')}>
+              <div className='user-profile-posts-icon'>&#9993;</div>
+              <div className='user-profile-posts-text'>Posts</div>
+              {displayCategory === 'posts' && <div className='user-profile-selected-category'></div>}
+            </div>
+            <div className='user-profile-posts' onClick={() => setDisplayCategory('likes')}>
+              <div className='user-profile-posts-icon' style={{ color: '#FF006F' }}>&#x2661;</div>
+              <div className='user-profile-posts-text'>Likes</div>
+              {displayCategory === 'likes' && <div className='user-profile-selected-category'></div>}
+            </div>
           </div>
         </div>
       </section>
       {displayCategory === 'posts' && <section className='post-container'>
-        {data ? data.allPosts?.map((post: PostType) => (
+        {userPostsResult.data ? userPostsResult.data.allPosts?.map((post: PostType) => (
           <article className='post' key={post.id}>
             <Post key={post.id} post={post} />
           </article>

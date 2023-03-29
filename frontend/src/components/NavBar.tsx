@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { useMutation } from '@apollo/client';
 import { LOGOUT } from '../mutations/user';
@@ -7,6 +7,7 @@ import { LOGOUT } from '../mutations/user';
 import Theme from './Theme';
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const client = useApolloClient();
   const { name, resetUserInfo } = useUserInfo();
   const [logout, { data, loading, error }] = useMutation(LOGOUT,{
@@ -22,6 +23,7 @@ const NavBar = () => {
     window.localStorage.removeItem('userLoggedIn');
     client.resetStore();
     resetUserInfo();
+    navigate('/');
     console.log('sign out');
   };
 

@@ -15,10 +15,16 @@ export const postResolvers = {
           order: [
             ['createdAt', 'DESC']
           ],
-          include: {
-            model: User,
-            attributes: { include: ['username'] },
-          },
+          include: [
+            {
+              model: User,
+              attributes: { include: ['username'] },
+            },
+            {
+              model: User,
+              as: 'usersliked',
+            }
+          ]
         });
         return userPosts;
       } else {

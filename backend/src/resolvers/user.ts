@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
-import { User, LikedPost, Session } from '../models/index';
+import { User, LikedPost, Session, Post } from '../models/index';
 import { UserEntry, UserLogin, Cookies } from '../types/user';
 // import { LikedPostEntry } from '../types/post';
 
@@ -22,10 +22,19 @@ export const userResolvers = {
     },
     singleUser: async (_root: undefined, args: { id: number }) => {
       const user = await User.findByPk(args.id, {
-        include: {
-          model: LikedPost,
-          as: 'likedPosts',
-        }
+        include: [
+          {
+            model: LikedPost,
+            as: 'likedPosts',
+          },
+          {
+            model: Post,
+          },
+          {
+            model: Post,
+            as: 'userLikedPosts'
+          },
+        ],
       });
 
       return user;
