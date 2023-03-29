@@ -63,20 +63,52 @@ export const userResolvers = {
       if (token) {
         const sessionToken = await Session.findOne({ where: { userToken: token } });
         if (sessionToken) {
+          // const user = await User.findByPk(sessionToken.userId, {
+          //   include: {
+          //     model: LikedPost,
+          //     as: 'likedPosts',
+          //   }
+          // });
           const user = await User.findByPk(sessionToken.userId, {
-            include: {
-              model: LikedPost,
-              as: 'likedPosts',
-            }
+            include: [
+              {
+                model: LikedPost,
+                as: 'likedPosts',
+              },
+              {
+                separate: true,
+                model: Post,
+                order: [
+                  [ 'createdAt', 'DESC']
+                ],
+                include: [{
+                  model: User,
+                  attributes: { include: ['username'] },
+                },],
+              },
+              {
+                model: Post,
+                order: [
+                  [ 'createdAt', 'DESC']
+                ],
+                as: 'userLikedPosts',
+                include: [{
+                  model: User,
+                  attributes: { include: ['username'] },
+                },],
+              },
+            ],
           });
           if (user) {
-            const returnedUser = {
-              id: user.id,
-              username: user.username,
-              name: user.name,
-              likedPosts: user.likedPosts,
-            };
-            return { ...returnedUser };
+            // const returnedUser = {
+            //   id: user.id,
+            //   username: user.username,
+            //   name: user.name,
+            //   likedPosts: user.likedPosts,
+            // };
+            // return { ...returnedUser };
+
+            return user;
           } else {
             throw new GraphQLError('User not found', {
               extensions: {
@@ -116,13 +148,44 @@ export const userResolvers = {
       return user;
     },
     login: async (_root: undefined, args: UserLogin, { res }: Cookies) => {
-      const user = await User.findOne({ 
+      // const user = await User.findOne({ 
+      //   where: { username: args.username },
+      //   include: {
+      //     model: LikedPost,
+      //     attributes: ['postId', 'userId'],
+      //     as: 'likedPosts',
+      //   },
+      // });
+      const user = await User.findOne({
         where: { username: args.username },
-        include: {
-          model: LikedPost,
-          attributes: ['postId', 'userId'],
-          as: 'likedPosts',
-        },
+        include: [
+          {
+            model: LikedPost,
+            as: 'likedPosts',
+          },
+          {
+            separate: true,
+            model: Post,
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
+          },
+          {
+            model: Post,
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            as: 'userLikedPosts',
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
+          },
+        ],
       });
 
       // console.log(user);
@@ -156,12 +219,12 @@ export const userResolvers = {
         here: 'here',
       };
 
-      const returnedUser = {
-        id: user.id,
-        username: user.username,
-        name: user.name,
-        likedPosts: user.likedPosts,
-      };
+      // const returnedUser = {
+      //   id: user.id,
+      //   username: user.username,
+      //   name: user.name,
+      //   likedPosts: user.likedPosts,
+      // };
 
       const token = jwt.sign(objectForToken, process.env.SECRET as string);
 
@@ -179,8 +242,8 @@ export const userResolvers = {
           httpOnly: true,
         }
       );
-
-      return { ...returnedUser };
+      // return { ...returnedUser };
+      return user;
     },
     logout: async (_root: undefined, _args: undefined, { req, res }: Cookies) => {
       const token = cookie.parse(req.headers.cookie as string).session;

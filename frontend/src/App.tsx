@@ -28,7 +28,7 @@ const App = () => {
       setName(data.loginOnLoad.name);
       setUserId(data.loginOnLoad.id);
       setUsername(data.loginOnLoad.username);
-      setLikedPosts(data.loginOnLoad.likedPosts);
+      setLikedPosts(data.loginOnLoad.userLikedPosts);
     }
   });
 

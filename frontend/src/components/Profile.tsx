@@ -21,6 +21,7 @@ const Profile = () => {
   });
 
   console.log('single user', loading, error, data);
+  console.log('reversed', [...data?.singleUser.userLikedPosts || []].reverse());
   // console.log('user posts', userPostsResult.loading, userPostsResult.error, userPostsResult.data);
 
   return (
@@ -66,7 +67,7 @@ const Profile = () => {
       }
       {displayCategory === 'likes' &&
         <section className='post-container'>
-          {data ? data.singleUser.userLikedPosts.map((post: PostType) => (
+          {data ? [...data.singleUser.userLikedPosts].reverse().map((post: PostType) => (
             <article className='post' key={post.id}>
               <Post key={post.id} post={post} />
             </article>

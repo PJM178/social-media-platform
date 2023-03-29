@@ -1,8 +1,17 @@
 import { createContext, ReactNode, useState } from 'react';
 
+interface UserType {
+  username: string | null
+  __typename: string | null
+}
+
 interface LikedPost {
-  postId: number | null
-  userId: number | null
+  id: number | null
+  content: string | null
+  title: string | null
+  likes: number | null
+  user: UserType | null
+  __typename: string | null
 }
 
 interface UserContextProps {
@@ -13,7 +22,7 @@ interface UserContextProps {
   name: string | null,
   setName: React.Dispatch<React.SetStateAction<string | null>>,
   resetUserInfo: () => void,
-  likedPosts: LikedPost[]
+  likedPosts: LikedPost[] | null | undefined
   setLikedPosts: React.Dispatch<React.SetStateAction<LikedPost[] | []>>,
 }
 

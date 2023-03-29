@@ -31,9 +31,9 @@ const LikingPost = ({ post }: PostProps) => {
     refetchQueries: [{ query: GET_ALL_POSTS }],
     onError: ({ graphQLErrors }) => {
       if (graphQLErrors[0].extensions.argumentName === 'inc') {
-        setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
+        setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
       } else if (graphQLErrors[0].extensions.argumentName === 'dec') {
-        setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
+        setLikedPosts([...likedPosts || [], { content: post.content, id: post.id, likes: post.likes, title: post.title, __typename: post.__typename, user: { username: post.user.username, __typename: post.user.__typename } }]);
       }
       console.log(error);
       console.log(graphQLErrors[0].extensions.argumentName);
@@ -64,7 +64,7 @@ const LikingPost = ({ post }: PostProps) => {
 
   const handleLikePost = (direction: 'dec' | 'inc') => {
     if (direction === 'inc' && !loading) {
-      setLikedPosts([...likedPosts, { postId: Number(post.id), userId: Number(userId) }]);
+      setLikedPosts([...likedPosts || [], { content: post.content, id: post.id, likes: post.likes, title: post.title, __typename: post.__typename, user: { username: post.user.username, __typename: post.user.__typename } }]);
       editLikes({ variables: { id: post.id, type: direction, userId: userId },
         optimisticResponse: {
           editLikes: {
@@ -76,7 +76,7 @@ const LikingPost = ({ post }: PostProps) => {
         },
       });
     } else if (!loading) {
-      setLikedPosts(likedPosts.filter(posts => posts.postId !== Number(post.id)));
+      setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
       editLikes({ variables: { id: post.id, type: direction, userId: userId },
         optimisticResponse: {
           editLikes: {
@@ -92,7 +92,7 @@ const LikingPost = ({ post }: PostProps) => {
 
   // Check the likedPosts array and if the user exists from context
   if (userId) {
-    if (likedPosts.some(likedPost => likedPost.postId === Number(post.id))) {
+    if (likedPosts?.some(likedPost => likedPost.id === post.id)) {
       return (
         <>
           <div onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>

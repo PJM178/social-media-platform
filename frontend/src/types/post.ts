@@ -1,13 +1,17 @@
 export interface LikedPosts {
-  userId: number
-  postId: number
+  id: number
+  content: string
+  title: string
+  likes: number
+  user: UserType
+  __typename: string
 }
 
 export interface UserType {
   username: string
   name?: string
   id: number
-  likedPosts: [LikedPosts]
+  likedPosts: [PostType]
   __typename: string
 }
 

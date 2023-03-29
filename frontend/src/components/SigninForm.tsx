@@ -47,7 +47,7 @@ const SigninForm = () => {
       setName(data.login.name);
       setUserId(data.login.id);
       setUsername(data.login.username);
-      setLikedPosts(data.login.likedPosts);
+      setLikedPosts(data.login.userLikedPosts);
       window.localStorage.setItem('userLoggedIn', 'yes');
       navigate('/');
     }
