@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
-import { USER_POSTS } from '../queries/post';
+// import { USER_POSTS } from '../queries/post';
 import { GET_USER } from '../queries/user';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { PostType } from '../types/post';
@@ -10,17 +10,18 @@ import Post from './Post';
 const Profile = () => {
   const [displayCategory, setDisplayCategory] = useState<string>('posts');
   const { userId, username, name } = useUserInfo();
-  const userPostsResult = useQuery(USER_POSTS, {
-    fetchPolicy: 'cache-and-network',
-    variables: { userId: Number(userId) }
-  });
+  // const userPostsResult = useQuery(USER_POSTS, {
+  //   fetchPolicy: 'cache-and-network',
+  //   variables: { userId: Number(userId) },
+  // });
 
   const { loading, error, data } = useQuery(GET_USER, {
-    variables: { singleUserId: Number(userId) }
+    fetchPolicy: 'cache-and-network',
+    variables: { singleUserId: Number(userId) },
   });
 
   console.log('single user', loading, error, data);
-  console.log('user posts', userPostsResult.loading, userPostsResult.error, userPostsResult.data);
+  // console.log('user posts', userPostsResult.loading, userPostsResult.error, userPostsResult.data);
 
   return (
     <>
@@ -54,13 +55,24 @@ const Profile = () => {
           </div>
         </div>
       </section>
-      {displayCategory === 'posts' && <section className='post-container'>
-        {userPostsResult.data ? userPostsResult.data.allPosts?.map((post: PostType) => (
-          <article className='post' key={post.id}>
-            <Post key={post.id} post={post} />
-          </article>
-        )) : null}
-      </section>}
+      {displayCategory === 'posts' &&
+        <section className='post-container'>
+          {data ? data.singleUser.posts.map((post: PostType) => (
+            <article className='post' key={post.id}>
+              <Post key={post.id} post={post} />
+            </article>
+          )) : null}
+        </section>
+      }
+      {displayCategory === 'likes' &&
+        <section className='post-container'>
+          {data ? data.singleUser.userLikedPosts.map((post: PostType) => (
+            <article className='post' key={post.id}>
+              <Post key={post.id} post={post} />
+            </article>
+          )) : null}
+        </section>
+      }
     </>
   );
 };

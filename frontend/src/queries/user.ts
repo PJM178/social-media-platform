@@ -15,12 +15,18 @@ export const GET_USER = gql`
         content
         id
         likes
+        user {
+          username
+        }
       }
       userLikedPosts {
         title
         content
         id
         likes
+        user {
+          username
+        }
       }
     }
   }

@@ -28,11 +28,26 @@ export const userResolvers = {
             as: 'likedPosts',
           },
           {
+            separate: true,
             model: Post,
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
           },
           {
             model: Post,
-            as: 'userLikedPosts'
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            as: 'userLikedPosts',
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
           },
         ],
       });
