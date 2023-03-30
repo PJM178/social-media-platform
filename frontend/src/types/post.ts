@@ -30,4 +30,5 @@ export interface PostType {
 
 export interface PostProps {
   post: PostType
+  delay?: boolean
 }

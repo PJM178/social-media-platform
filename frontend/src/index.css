@@ -105,6 +105,14 @@ aside {
   margin-bottom: 5px;
 }
 
+.liking-post-button {
+  width: fit-content;
+}
+
+.liking-post-button:hover {
+  cursor: pointer;
+}
+
 .theme {
   width: 50px;
   height: 50px;
@@ -226,4 +234,50 @@ aside {
   background-color: green;
   height: 3px;
   border-radius: 2px;
+}
+
+/* Modal - confirm disliking post from profile */
+
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  margin-top: 70%; /* Location of the box */
+  margin-left: 10%;
+  left: 0;
+  top: 0;
+  width: 80%; /* Full width */
+  height: 200px; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+}
+
+.modal-content {
+  margin: auto;
+  border: 1px solid #888;
+  /* width: 80%; */
+  background-color: var(--background-color);
+}
+
+.modal-content-inside {
+  padding: 20px;
+}
+
+.progress-bar {
+  background-color: green;
+  height: 3px;
+  width: 100%;
+  transition: 2s linear;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }

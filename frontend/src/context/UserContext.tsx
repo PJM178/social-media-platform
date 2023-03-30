@@ -22,7 +22,7 @@ interface UserContextProps {
   name: string | null,
   setName: React.Dispatch<React.SetStateAction<string | null>>,
   resetUserInfo: () => void,
-  likedPosts: LikedPost[] | null | undefined
+  likedPosts: LikedPost[] | null
   setLikedPosts: React.Dispatch<React.SetStateAction<LikedPost[] | []>>,
 }
 

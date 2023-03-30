@@ -1,28 +1,41 @@
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-// import { USER_POSTS } from '../queries/post';
 import { GET_USER } from '../queries/user';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { PostType } from '../types/post';
+
 import Post from './Post';
+import LikingPost from './LikingPost';
+
+// Debounce delay for searching posts so that the server is not constantly pinged on change
+// const useDebounceDelay = (value, time = 500) => {
+//   const [debounceValue, setDebounceValue] = useState(value);
+
+//   useEffect(() => {
+//     const timeout = setTimeout(() => {
+//       setDebounceValue(value);
+//     }, time);
+
+//     return () => {
+//       clearTimeout(timeout);
+//     };
+//   }, [value, time]);
+
+//   return debounceValue;
+// };
 
 const Profile = () => {
   const [displayCategory, setDisplayCategory] = useState<string>('posts');
-  const { userId, username, name } = useUserInfo();
-  // const userPostsResult = useQuery(USER_POSTS, {
-  //   fetchPolicy: 'cache-and-network',
-  //   variables: { userId: Number(userId) },
-  // });
+  const { userId, username, name, likedPosts } = useUserInfo();
 
   const { loading, error, data } = useQuery(GET_USER, {
     fetchPolicy: 'cache-and-network',
     variables: { singleUserId: Number(userId) },
   });
-
+  console.log(likedPosts);
   console.log('single user', loading, error, data);
   console.log('reversed', [...data?.singleUser.userLikedPosts || []].reverse());
-  // console.log('user posts', userPostsResult.loading, userPostsResult.error, userPostsResult.data);
 
   return (
     <>
@@ -67,9 +80,10 @@ const Profile = () => {
       }
       {displayCategory === 'likes' &&
         <section className='post-container'>
-          {data ? [...data.singleUser.userLikedPosts].reverse().map((post: PostType) => (
+          {likedPosts ? [...likedPosts].reverse().map((post) => (
             <article className='post' key={post.id}>
-              <Post key={post.id} post={post} />
+              <Post key={post.id} post={post as PostType} />
+              <LikingPost post={post as PostType} delay={true} />
             </article>
           )) : null}
         </section>
