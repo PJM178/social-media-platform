@@ -1,16 +1,28 @@
-import { PostProps } from '../types/post';
+import { useNavigate } from 'react-router-dom';
 
-const Post = ({ post }: PostProps) => {
+import { PostProps, PostType } from '../types/post';
+
+import LikingPost from './LikingPost';
+
+const Post = ({ post, delay }: PostProps) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (user: string, postId: number, post: PostType, e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    console.log((e.target as Element).className);
+    if ((e.target as Element).className !== 'liking-post-button-dislike' && (e.target as Element).className !== 'liking-post-button-like' && (e.target as Element).className !== 'modal-content-cancel') {
+      navigate(`/profile/${user}/${postId}`, { state: post });
+    }
+  };
+
   return (
-    // <article className='post'>
     <>
-      <h4>Username: {post.user.username}</h4>
-      <div>Title: {post.title}</div>
-      <div>Content: {post.content}</div>
-      <div>Likes: {post.likes}</div>
-      {/* <LikingPost post={post} /> */}
+      <article onClick={(e) => handleNavigate(post.user.username, post.id, post, e)} className='post' key={post.id}>
+        <h4>Username: {post.user.username}</h4>
+        <div>Title: {post.title}</div>
+        <div>Content: {post.content}</div>
+        <LikingPost post={post} delay={delay} />
+      </article>
     </>
-    // </article>
   );
 };
 

@@ -9,7 +9,7 @@ import Theme from './Theme';
 const NavBar = () => {
   const navigate = useNavigate();
   const client = useApolloClient();
-  const { name, resetUserInfo } = useUserInfo();
+  const { name, resetUserInfo, username } = useUserInfo();
   const [logout, { data, loading, error }] = useMutation(LOGOUT,{
     onError: (error) => {
       console.log(error);
@@ -37,7 +37,7 @@ const NavBar = () => {
           <div className='nav-link'><Link to='/'>Home</Link></div>
           {/* {userLoading && <div className='loading nav-link'>...</div>} */}
           {!name && <div className='nav-link'><Link to='/register' state={{ state: 'register' }}>Register</Link></div>}
-          {name && <div className='nav-link'><Link to='/profile'>Profile</Link></div>}
+          {name && <div className='nav-link'><Link to={`/profile/${username}`}>Profile</Link></div>}
           {/* <div className='nav-link'><Link to='/signin' state={{ state: 'signin' }}>Sign in</Link></div> */}
           {name
             ? <div className='nav-link sign-out-button' onClick={() => handleSignOut()}>Sign out</div>

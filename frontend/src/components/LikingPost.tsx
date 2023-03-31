@@ -165,13 +165,13 @@ const LikingPost = ({ post, delay }: PostProps) => {
       return (
         <>
           {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />}
-          <div className='liking-post-button' onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
+          <div className='liking-post-button-dislike' onClick={() => handleLikePost('dec')}>&#9829; {post.likes}</div>
         </>
       );
     } else {
       return (
         <>
-          <div className='liking-post-button' onClick={() => handleLikePost('inc')} style={{ color: '#FF006F' }}>&#x2661;</div>
+          <div className='liking-post-button-like' onClick={() => handleLikePost('inc')}>&#x2661; {post.likes}</div>
         </>
       );
     }

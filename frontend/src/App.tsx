@@ -12,6 +12,7 @@ import SidePanel from './components/SidePanel';
 import PostForm from './components/PostForm';
 import RegisterForm from './components/RegisterForm';
 import Profile from './components/Profile';
+import SinglePost from './components/SinglePost';
 
 import { useTheme } from './hooks/useTheme';
 
@@ -53,7 +54,8 @@ const App = () => {
           {/* <Route path='/signin' element={<HomePage />} /> */}
           <Route path='/signin' element={<SigninForm />} />
           <Route path='/register' element={<RegisterForm />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:username' element={<Profile />} />
+          <Route path='/profile/:username/:id' element={<SinglePost />} />
         </Routes>
       </div>
     );

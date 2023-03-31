@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 import { GET_USER } from '../queries/user';
 import { useUserInfo } from '../hooks/useUserInfo';
@@ -26,8 +27,16 @@ import LikingPost from './LikingPost';
 // };
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [displayCategory, setDisplayCategory] = useState<string>('posts');
   const { userId, username, name, likedPosts } = useUserInfo();
+
+  if (!username) {
+    useEffect(() => {
+      navigate('/signin');
+    }, []);
+    return null;
+  }
 
   const { loading, error, data } = useQuery(GET_USER, {
     fetchPolicy: 'cache-and-network',
@@ -72,19 +81,14 @@ const Profile = () => {
       {displayCategory === 'posts' &&
         <section className='post-container'>
           {data ? data.singleUser.posts.map((post: PostType) => (
-            <article className='post' key={post.id}>
-              <Post key={post.id} post={post} />
-            </article>
+            <Post key={post.id} post={post} />
           )) : null}
         </section>
       }
       {displayCategory === 'likes' &&
         <section className='post-container'>
           {likedPosts ? [...likedPosts].reverse().map((post) => (
-            <article className='post' key={post.id}>
-              <Post key={post.id} post={post as PostType} />
-              <LikingPost post={post as PostType} delay={true} />
-            </article>
+            <Post key={post.id} post={post as PostType} delay={true} />
           )) : null}
         </section>
       }

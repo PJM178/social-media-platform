@@ -38,6 +38,7 @@ html[data-theme='dark-on-load'] {
   --link-color: #121416d8;
   --drop-shadow: rgba(0, 0, 0, 0.6);
   --button-hover-color: rgba(0, 128, 0, 0.7);
+  --grey-text-color: rgb(113, 118, 123);
 }
 
 /* End - light and dark color theming */
@@ -106,12 +107,29 @@ aside {
   margin-bottom: 5px;
 }
 
-.liking-post-button {
-  width: fit-content;
+.post:hover {
+  border: 1px solid green;
+  cursor: pointer;
 }
 
-.liking-post-button:hover {
+.liking-post-button-like {
+  width: fit-content;
+  color: var(--grey-text-color);
+}
+
+.liking-post-button-like:hover {
   cursor: pointer;
+  color: #FF006F
+}
+
+.liking-post-button-dislike {
+  width: fit-content;
+  color: #FF006F;
+}
+
+.liking-post-button-dislike:hover {
+  cursor: pointer;
+  color: var(--grey-text-color);
 }
 
 .theme {
