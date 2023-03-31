@@ -36,7 +36,7 @@ const Profile = () => {
   console.log(likedPosts);
   console.log('single user', loading, error, data);
   console.log('reversed', [...data?.singleUser.userLikedPosts || []].reverse());
-
+  console.log(data && new Date(data.singleUser.createdAt * 1000));
   return (
     <>
       <section className='user-profile-container'>
@@ -53,7 +53,7 @@ const Profile = () => {
           </div>
           <div>
             <div className='user-profile-bio'>bio</div>
-            <div className='user-profile-joined grey-text-color'>joined</div>
+            <div className='user-profile-joined grey-text-color'>joined {data && new Date(data.singleUser.createdAt * 1000).toString()}</div>
           </div>
           <div className='user-profile-posts-container'>
             <div className='user-profile-posts' onClick={() => setDisplayCategory('posts')}>

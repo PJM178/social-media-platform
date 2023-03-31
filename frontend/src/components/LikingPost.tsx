@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { EDIT_LIKES } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
@@ -28,14 +28,13 @@ interface CacheDataType {
 }
 
 const LikingPost = ({ post, delay }: PostProps) => {
-  let timeouts: NodeJS.Timeout[] = [];
-  const [dislikeDelay, setDislikeDelay] = useState<boolean>(false);
+  const testRef: { current: NodeJS.Timeout | null } = useRef(null);
+  // let timeouts: NodeJS.Timeout[] = [];
   const [go, setGo] = useState<boolean>(false);
   const [dir, setDir] = useState<string>('');
   const [clearTimer, setClearTimer] = useState<boolean>(false);
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
   console.log('delay', delay);
-  console.log('dislikedelay', dislikeDelay);
   console.log('go', go);
   console.log('clearTime', clearTimer);
 
@@ -108,13 +107,39 @@ const LikingPost = ({ post, delay }: PostProps) => {
     }
   };
 
-  // useEffect for modal timeout to cancel like delete
+  // useEffect for modal timeout to cancel the like delete
+  // useEffect(() => {
+  //   if (go && delay) {
+  //     timeouts.push(setTimeout(() => {
+  //       console.log('timer');
+  //       setGo(false);
+  //       setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
+  //       editLikes({ variables: { id: post.id, type: dir, userId: userId },
+  //         optimisticResponse: {
+  //           editLikes: {
+  //             type: dir,
+  //             message: '',
+  //             post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
+  //             __typename: 'likedPostResponse'
+  //           },
+  //         },
+  //       });
+  //     }, 2000));
+  //     if (clearTimer) {
+  //       console.log('clear timer', timeouts);
+  //       timeouts.forEach(timeout => clearTimeout(timeout));
+  //       console.log(timeouts);
+  //       timeouts = [];
+  //     }
+  //     return () => timeouts.forEach(timeout => clearTimeout(timeout));
+  //   }
+  // }, [go, clearTimer]);
+  // test stuff to use useRef
   useEffect(() => {
     if (go && delay) {
-      timeouts.push(setTimeout(() => {
+      testRef.current = setTimeout(() => {
         console.log('timer');
         setGo(false);
-        setDislikeDelay(true);
         setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
         editLikes({ variables: { id: post.id, type: dir, userId: userId },
           optimisticResponse: {
@@ -126,14 +151,11 @@ const LikingPost = ({ post, delay }: PostProps) => {
             },
           },
         });
-      }, 2000));
+      }, 2000);
       if (clearTimer) {
-        console.log('clear timer', timeouts);
-        timeouts.forEach(timeout => clearTimeout(timeout));
-        console.log(timeouts);
-        timeouts = [];
+        clearTimeout(testRef.current);
       }
-      return () => timeouts.forEach(timeout => clearTimeout(timeout));
+      return () => clearTimeout(testRef.current as NodeJS.Timeout);
     }
   }, [go, clearTimer]);
 
@@ -142,7 +164,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
     if (likedPosts?.some(likedPost => likedPost.id === post.id)) {
       return (
         <>
-          {delay && go && !clearTimer && <DislikeModal timeouts={timeouts} setClearTimer={setClearTimer} />}
+          {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />}
           <div className='liking-post-button' onClick={() => handleLikePost('dec')} style={{ color: '#FF006F' }}>&#9829;</div>
         </>
       );

@@ -42,7 +42,7 @@ const App = () => {
 
   // console.log('app', loading, data, error);
 
-  if (username) {
+  if (username || error) {
     return (
       <div>
         <Header />
@@ -57,20 +57,20 @@ const App = () => {
         </Routes>
       </div>
     );
-  } else if (error) {
-    return (
-      <div>
-        <Header />
-        <SidePanel />
-        <Routes>
-          <Route path='/new-post' element={<PostForm />} />
-          <Route path='/' element={<HomePage />} />
-          {/* <Route path='/signin' element={<HomePage />} /> */}
-          <Route path='/signin' element={<SigninForm />} />
-          <Route path='/register' element={<RegisterForm />} />
-        </Routes>
-      </div>
-    );
+  // } else if (error) {
+  //   return (
+  //     <div>
+  //       <Header />
+  //       <SidePanel />
+  //       <Routes>
+  //         <Route path='/new-post' element={<PostForm />} />
+  //         <Route path='/' element={<HomePage />} />
+  //         {/* <Route path='/signin' element={<HomePage />} /> */}
+  //         <Route path='/signin' element={<SigninForm />} />
+  //         <Route path='/register' element={<RegisterForm />} />
+  //       </Routes>
+  //     </div>
+  //   );
   } else {
     return <div style={{ display: 'flex', justifyContent: 'center' }}><div style={{ marginTop: '100px' }} className='loading'>...</div></div>;
   }

@@ -28,6 +28,7 @@ export const LOGIN = gql`
           username
         }
       }
+      createdAt
     }
   }
 `;

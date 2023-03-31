@@ -28,6 +28,7 @@ export const GET_USER = gql`
           username
         }
       }
+      createdAt
     }
   }
 `;
@@ -60,6 +61,7 @@ export const LOGIN_ON_LOAD = gql`
           username
         }
       }
+      createdAt
     }
   }
 `;
