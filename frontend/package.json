@@ -32,7 +32,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint \"./src/**/*.{ts,tsx}\"",
     "compile": "graphql-codegen",
-    "watch": "graphql-codegen -w"
+    "watch": "graphql-codegen -w",
+    "build:ui": "rm -rf build && cd ../frontend && npm run build && cp -r build ../backend"
   },
   "eslintConfig": {
     "extends": [

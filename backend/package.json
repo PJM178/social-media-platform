@@ -8,8 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "lint": "eslint --ext .ts .",
-    "start": "tsc && node build/index.js",
-    "dev": "tsx watch src/index.ts"
+    "start": "tsx && node src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build:ui": "rm -rf build && cd ../frontend && npm run build && cp -r build ../backend"
   },
   "keywords": [],
   "author": "",
