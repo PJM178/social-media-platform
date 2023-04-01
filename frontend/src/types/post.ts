@@ -1,3 +1,5 @@
+import { Comment } from './comment';
+
 export interface LikedPosts {
   id: number
   content: string
@@ -31,4 +33,18 @@ export interface PostType {
 export interface PostProps {
   post: PostType
   delay?: boolean
+}
+
+export interface SinglePost {
+  id: number
+  content: string
+  title: string
+  likes: number
+  user: UserType
+  __typename: string
+  comments: [Comment]
+}
+
+export interface SinglePostType {
+  singlePost: SinglePost
 }
