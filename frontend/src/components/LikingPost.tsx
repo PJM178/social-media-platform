@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import { useState, useEffect, useRef } from 'react';
 
 import { EDIT_LIKES } from '../mutations/post';
-import { GET_ALL_POSTS } from '../queries/post';
+import { GET_ALL_POSTS, GET_SINGLE_POST } from '../queries/post';
 import { PostProps } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
@@ -39,7 +39,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
   console.log('clearTime', clearTimer);
 
   const [editLikes, { loading, error }] = useMutation(EDIT_LIKES, {
-    refetchQueries: [{ query: GET_ALL_POSTS }],
+    refetchQueries: [{ query: GET_ALL_POSTS }, { query: GET_SINGLE_POST }],
     onError: ({ graphQLErrors }) => {
       if (graphQLErrors[0].extensions.argumentName === 'inc') {
         setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));

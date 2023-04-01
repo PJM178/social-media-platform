@@ -14,7 +14,7 @@ export const GET_ALL_POSTS = gql`
   }
 `;
 
-export const SINGLE_POST = gql`
+export const GET_SINGLE_POST = gql`
   query SinglePost($id: Int!) {
     singlePost(id: $id) {
       title
@@ -23,6 +23,13 @@ export const SINGLE_POST = gql`
       likes
       user {
         username
+      }
+      comments {
+        userId
+        postId
+        comment
+        createdAt
+        updatedAt
       }
     }
   }

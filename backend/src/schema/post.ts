@@ -8,6 +8,7 @@ const postTypeDefs = `
     createdAt: String!,
     updatedAt: String!,
     user: User
+    comments: [Comment]
   }
 
   type Query {

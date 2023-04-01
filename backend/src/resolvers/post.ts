@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql';
 import cookie from 'cookie';
 
-import { Post, Session, User, LikedPost } from '../models/index';
+import { Post, Session, User, LikedPost, Comment } from '../models/index';
 import { PostEntry } from '../types/post';
 import { Cookies } from '../types/user';
 
@@ -53,10 +53,15 @@ export const postResolvers = {
       const { id } = { ...args };
       console.log('singlepost');
       const post = await Post.findByPk(id,{
-        include: {
-          model: User,
-          attributes: { include: ['username'] },
-        },
+        include: [
+          {
+            model: User,
+            attributes: { include: ['username'] },
+          },
+          {
+            model: Comment,
+          },
+        ],
       });
       if (post) {
         return post;
