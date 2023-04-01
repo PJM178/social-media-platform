@@ -51,14 +51,14 @@ await connectToDatabase();
 // and our expressMiddleware function.
 
 const corsOptions: cors.CorsOptions = {
-  origin: 'http://localhost:4000',
+  origin: process.env.CORS,
   credentials: true,
 };
 
 app.use(
   cors<cors.CorsRequest>(corsOptions),
   bodyParser.json(),
-  express.static('build'),
+  // express.static('build'),
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
