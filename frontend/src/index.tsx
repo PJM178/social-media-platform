@@ -14,7 +14,7 @@ import UserContextProvider from './context/UserContext';
 import ThemeContextProvider from './context/ThemeContext';
 
 const link = createHttpLink({
-  uri: 'https://social-media-platform-qzzz.onrender.com/',
+  uri: 'http://localhost:4000',
   credentials: 'include',
 });
 
