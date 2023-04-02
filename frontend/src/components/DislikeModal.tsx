@@ -10,7 +10,7 @@ const DislikeModal = ({ setClearTimer }: DislikeModalProps) => {
   useEffect(() => {
     setProgressBarWidth(0);
   }, []);
-  console.log('from modal');
+
   return (
     <div className="modal">
       <div className="modal-content">

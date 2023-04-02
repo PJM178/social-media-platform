@@ -30,3 +30,9 @@ export interface UserLogin {
   username: string
   password: string
 }
+
+export interface EditProfile {
+  username: string
+  bio: string
+  userId: number
+}

@@ -6,6 +6,7 @@ export const GET_USER = gql`
       id
       name
       username
+      bio
       likedPosts {
         postId
         userId
@@ -39,6 +40,7 @@ export const LOGIN_ON_LOAD = gql`
       id
       name
       username
+      bio
       likedPosts {
         postId
         userId

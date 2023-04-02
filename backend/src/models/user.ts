@@ -10,6 +10,7 @@ class User extends Model {
   declare passwordHash: string;
   declare disabled: boolean;
   declare admin: boolean;
+  declare bio: string;
   declare createdAt: Date;
   declare updatedAt: Date;
   declare likedPosts?: LikedPost[] | [];

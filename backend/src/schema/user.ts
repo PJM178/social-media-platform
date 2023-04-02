@@ -8,6 +8,7 @@ const userTypeDefs = `
     updatedAt: String!,
     disabled: Boolean!,
     admin: Boolean!,
+    bio: String,
     """
     likedPosts named so as it's named in Sequelize associations
     the name has be the same as it's in the associations or the query
@@ -39,6 +40,11 @@ const userTypeDefs = `
       password: String!
     ): User
     logout: User
+    editProfile(
+      userId: Int!
+      username: String!
+      bio: String
+    ): User
   }
 `;
 

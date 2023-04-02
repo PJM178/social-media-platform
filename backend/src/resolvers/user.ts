@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 import { User, LikedPost, Session, Post } from '../models/index';
-import { UserEntry, UserLogin, Cookies } from '../types/user';
+import { UserEntry, UserLogin, Cookies, EditProfile } from '../types/user';
 // import { LikedPostEntry } from '../types/post';
 
 export const userResolvers = {
@@ -268,5 +268,47 @@ export const userResolvers = {
         });
       }
     },
+    editProfile: async (_root: undefined, args: EditProfile) => {
+      const { userId, bio, username } = { ...args };
+      const user = await User.findByPk(userId, {
+        include: [
+          {
+            model: LikedPost,
+            as: 'likedPosts',
+          },
+          {
+            separate: true,
+            model: Post,
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
+          },
+          {
+            model: Post,
+            order: [
+              [ 'createdAt', 'DESC']
+            ],
+            as: 'userLikedPosts',
+            include: [{
+              model: User,
+              attributes: { include: ['username'] },
+            },],
+          },
+        ],
+      });
+      if (user) {
+        await user.update({
+          bio: bio,
+          username: username,
+        });
+        return user;
+      } else {
+        throw new GraphQLError('Failed to update the details');
+      }
+    }
   }
 };
