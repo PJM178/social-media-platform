@@ -32,7 +32,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
   // let timeouts: NodeJS.Timeout[] = [];
   const [go, setGo] = useState<boolean>(false);
   const [dir, setDir] = useState<string>('');
-  const [clearTimer, setClearTimer] = useState<boolean>(false);
+  const [clearTimer, setClearTimer] = useState<boolean>(true);
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
   console.log('delay', delay);
   console.log('go', go);
@@ -72,7 +72,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
       }
     },
   });
-
+  console.log('loading liking post', loading);
   const handleLikePost = (direction: 'dec' | 'inc') => {
     if (direction === 'inc' && !loading) {
       setLikedPosts([...likedPosts || [], { content: post.content, id: post.id, likes: post.likes + 1, title: post.title, __typename: post.__typename, user: { username: post.user.username, __typename: post.user.__typename } }]);
@@ -108,32 +108,6 @@ const LikingPost = ({ post, delay }: PostProps) => {
   };
 
   // useEffect for modal timeout to cancel the like delete
-  // useEffect(() => {
-  //   if (go && delay) {
-  //     timeouts.push(setTimeout(() => {
-  //       console.log('timer');
-  //       setGo(false);
-  //       setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
-  //       editLikes({ variables: { id: post.id, type: dir, userId: userId },
-  //         optimisticResponse: {
-  //           editLikes: {
-  //             type: dir,
-  //             message: '',
-  //             post: { title: post.title, content: post.content, id: post.id, likes: post.likes },
-  //             __typename: 'likedPostResponse'
-  //           },
-  //         },
-  //       });
-  //     }, 2000));
-  //     if (clearTimer) {
-  //       console.log('clear timer', timeouts);
-  //       timeouts.forEach(timeout => clearTimeout(timeout));
-  //       console.log(timeouts);
-  //       timeouts = [];
-  //     }
-  //     return () => timeouts.forEach(timeout => clearTimeout(timeout));
-  //   }
-  // }, [go, clearTimer]);
   // test stuff to use useRef
   useEffect(() => {
     if (go && delay) {
