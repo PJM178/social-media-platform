@@ -34,9 +34,6 @@ const LikingPost = ({ post, delay }: PostProps) => {
   const [dir, setDir] = useState<string>('');
   const [clearTimer, setClearTimer] = useState<boolean>(true);
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
-  console.log('delay', delay);
-  console.log('go', go);
-  console.log('clearTime', clearTimer);
 
   const [editLikes, { loading, error }] = useMutation(EDIT_LIKES, {
     refetchQueries: [{ query: GET_ALL_POSTS }, { query: GET_SINGLE_POST }],
@@ -72,7 +69,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
       }
     },
   });
-  console.log('loading liking post', loading);
+
   const handleLikePost = (direction: 'dec' | 'inc') => {
     if (direction === 'inc' && !loading) {
       setLikedPosts([...likedPosts || [], { content: post.content, id: post.id, likes: post.likes + 1, title: post.title, __typename: post.__typename, user: { username: post.user.username, __typename: post.user.__typename } }]);

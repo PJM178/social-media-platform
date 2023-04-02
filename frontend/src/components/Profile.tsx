@@ -40,7 +40,6 @@ const Profile = () => {
   }
 
   const { loading, error, data } = useQuery<SingleUser>(GET_USER, {
-    fetchPolicy: 'cache-and-network',
     variables: { singleUserId: Number(userId) },
   });
   console.log(likedPosts);
@@ -60,7 +59,7 @@ const Profile = () => {
           </div>
           <div className='user-profile-buttons'>
             <div>edit profile</div>
-            <EditProfileForm />
+            <EditProfileForm userData={data} />
           </div>
           <div>
             <div className='user-profile-bio'>{data?.singleUser.bio}</div>
