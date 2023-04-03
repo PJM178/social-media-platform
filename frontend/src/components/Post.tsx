@@ -14,7 +14,7 @@ const Post = ({ post, delay }: PostProps) => {
 
   const handleNavigate = (user: string, postId: number, post: PostType, e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     console.log((e.target as Element).className);
-    if ((e.target as Element).className !== 'liking-post-button-dislike' && (e.target as Element).className !== 'liking-post-button-like' && (e.target as Element).className !== 'modal-content-cancel') {
+    if ((e.target as Element).className !== 'liking-post-button-dislike' && (e.target as Element).className !== 'liking-post-button-like') {
       if (Number(id) !== Number(postId)) {
         navigate(`/profile/${user}/${postId}`, { state: post });
       }

@@ -6,8 +6,6 @@ import { GET_ALL_POSTS, GET_SINGLE_POST } from '../queries/post';
 import { LikingPostProps } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
-import DislikeModal from './DislikeModal';
-
 // Types
 interface CacheUserType {
   username: string | null
@@ -29,10 +27,7 @@ interface CacheDataType {
 
 const LikingPost = ({ post, delay, go, setGo, clearTimer, setClearTimer }: LikingPostProps) => {
   const testRef: { current: NodeJS.Timeout | null } = useRef(null);
-  // let timeouts: NodeJS.Timeout[] = [];
-  // const [go, setGo] = useState<boolean>(false);
   const [dir, setDir] = useState<string>('');
-  // const [clearTimer, setClearTimer] = useState<boolean>(true);
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
 
   const [editLikes, { loading, error }] = useMutation(EDIT_LIKES, {
@@ -130,13 +125,12 @@ const LikingPost = ({ post, delay, go, setGo, clearTimer, setClearTimer }: Likin
       return () => clearTimeout(testRef.current as NodeJS.Timeout);
     }
   }, [go, clearTimer]);
-  console.log(delay, go, clearTimer);
+
   // Check the likedPosts array and if the user exists from context
   if (userId) {
     if (likedPosts?.some(likedPost => likedPost.id === post.id)) {
       return (
         <>
-          {/* {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />} */}
           <div className='liking-post-button-dislike' onClick={() => handleLikePost('dec')}>&#9829; {post.likes}</div>
         </>
       );

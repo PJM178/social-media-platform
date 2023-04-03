@@ -261,7 +261,7 @@ aside {
 .modal {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  margin-top: 70%; /* Location of the box */
+  margin-top: 70vh; /* Location of the box */
   margin-left: 10%;
   left: 0;
   top: 0;
