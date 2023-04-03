@@ -48,3 +48,12 @@ export interface SinglePost {
 export interface SinglePostType {
   singlePost: SinglePost
 }
+
+export interface LikingPostProps {
+  post: PostType
+  delay?: boolean
+  go: boolean
+  setGo: React.Dispatch<React.SetStateAction<boolean>>
+  clearTimer: boolean
+  setClearTimer: React.Dispatch<React.SetStateAction<boolean>>
+}

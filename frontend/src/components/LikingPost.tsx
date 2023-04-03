@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { EDIT_LIKES } from '../mutations/post';
 import { GET_ALL_POSTS, GET_SINGLE_POST } from '../queries/post';
-import { PostProps } from '../types/post';
+import { LikingPostProps } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
 
 import DislikeModal from './DislikeModal';
@@ -27,12 +27,12 @@ interface CacheDataType {
   allPosts: CachePostType[]
 }
 
-const LikingPost = ({ post, delay }: PostProps) => {
+const LikingPost = ({ post, delay, go, setGo, clearTimer, setClearTimer }: LikingPostProps) => {
   const testRef: { current: NodeJS.Timeout | null } = useRef(null);
   // let timeouts: NodeJS.Timeout[] = [];
-  const [go, setGo] = useState<boolean>(false);
+  // const [go, setGo] = useState<boolean>(false);
   const [dir, setDir] = useState<string>('');
-  const [clearTimer, setClearTimer] = useState<boolean>(true);
+  // const [clearTimer, setClearTimer] = useState<boolean>(true);
   const { likedPosts, userId, setLikedPosts } = useUserInfo();
 
   const [editLikes, { loading, error }] = useMutation(EDIT_LIKES, {
@@ -136,7 +136,7 @@ const LikingPost = ({ post, delay }: PostProps) => {
     if (likedPosts?.some(likedPost => likedPost.id === post.id)) {
       return (
         <>
-          {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />}
+          {/* {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />} */}
           <div className='liking-post-button-dislike' onClick={() => handleLikePost('dec')}>&#9829; {post.likes}</div>
         </>
       );
