@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { EDIT_PROFILE } from '../mutations/user';
@@ -10,23 +10,13 @@ import { useUserInfo } from '../hooks/useUserInfo';
 import { EditProfile, UserProfileType, SingleUser } from '../types/user';
 import { GET_USER } from '../queries/user';
 
+interface FormValues {
+  bio?: string
+  username: string
+}
+
 const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => {
-  console.log(userData);
-  const { userId } = useUserInfo();
-  const [editProfile, { data, loading, error }] = useMutation(EDIT_PROFILE, {
-    // refetchQueries: [{ query: GET_USER }],
-    onError: (error) => console.log(error),
-    update: (store, { data: { editProfile } }) => {
-      const data: SingleUser | null = store.readQuery({ query: GET_USER,  variables: { singleUserId: Number(userId) } });
-      console.log(editProfile);
-      console.log(data);
-      const newData = { ...data?.singleUser };
-      newData.bio = editProfile.bio;
-      newData.username = editProfile.username;
-      console.log(newData);
-      store.writeQuery({ query: GET_USER, data: { singleUser: newData } });
-    }
-  });
+  const [formValues, setFormValues] = useState<FormValues | null>(null);
 
   const validationSchema: yup.Schema<EditProfile> = yup.object().shape({
     username: yup
@@ -42,6 +32,27 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
     register, handleSubmit, reset, setValue,
     formState, formState: { errors, isSubmitSuccessful }
   } = useForm<EditProfile>({ resolver: yupResolver(validationSchema) });
+  const { userId } = useUserInfo();
+  const [editProfile, { data, loading, error }] = useMutation(EDIT_PROFILE, {
+    // refetchQueries: [{ query: GET_USER }],
+    onError: (error) => {
+      console.log(error);
+      if (formValues) {
+        setValue('bio', formValues?.bio);
+        setValue('username', formValues.username);
+      }
+    },
+    update: (store, { data: { editProfile } }) => {
+      const data = store.readQuery<SingleUser | undefined>({ query: GET_USER,  variables: { singleUserId: Number(userId) } });
+      console.log(editProfile);
+      console.log(data);
+      const newData = { singleUser: { ...data?.singleUser } };
+      newData.singleUser.bio = editProfile.bio;
+      newData.singleUser.username = editProfile.username;
+      console.log(newData);
+      store.writeQuery<SingleUser | undefined>({ query: GET_USER, data: newData as SingleUser });
+    }
+  });
 
   const onSubmit = (values: EditProfile) => {
     editProfile({ variables: { username: values.username, bio: values.bio, userId: Number(userId) },
@@ -59,6 +70,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
         }
       }
     });
+    setFormValues({ username: values.username, bio: values.bio });
     setValue('bio', '');
     setValue('username', '');
   };

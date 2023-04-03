@@ -125,11 +125,12 @@ const LikingPost = ({ post, delay }: PostProps) => {
       }, 2000);
       if (clearTimer) {
         clearTimeout(testRef.current);
+        setGo(false);
       }
       return () => clearTimeout(testRef.current as NodeJS.Timeout);
     }
   }, [go, clearTimer]);
-
+  console.log(delay, go, clearTimer);
   // Check the likedPosts array and if the user exists from context
   if (userId) {
     if (likedPosts?.some(likedPost => likedPost.id === post.id)) {

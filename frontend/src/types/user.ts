@@ -18,7 +18,7 @@ interface LikedPost {
 
 export interface UserProfileType {
   bio?: string
-  createdAt: string
+  createdAt?: string
   id: string
   name: string
   username: string
