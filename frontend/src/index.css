@@ -259,21 +259,20 @@ aside {
 /* Modal - confirm disliking post from profile */
 
 .modal {
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  margin-top: 70vh; /* Location of the box */
+  position: fixed;
+  z-index: 1;
+  margin-top: 70vh;
   margin-left: 10%;
   left: 0;
   top: 0;
-  width: 80%; /* Full width */
-  height: 200px; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 80%;
+  height: 200px;
+  overflow: auto;
 }
 
 .modal-content {
   margin: auto;
   border: 1px solid #888;
-  /* width: 80%; */
   background-color: var(--background-color);
 }
 

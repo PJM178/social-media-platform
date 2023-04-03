@@ -31,3 +31,7 @@ export interface UserProfileType {
 export interface SingleUser {
   singleUser: UserProfileType
 }
+
+export interface EditUserProfile {
+  editProfile: UserProfileType
+}

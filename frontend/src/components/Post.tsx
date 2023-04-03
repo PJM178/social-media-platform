@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 import { PostProps, PostType } from '../types/post';
 
@@ -11,6 +12,7 @@ const Post = ({ post, delay }: PostProps) => {
   const { id } = useParams();
   const [go, setGo] = useState<boolean>(false);
   const [clearTimer, setClearTimer] = useState<boolean>(true);
+  const { username } = useUserInfo();
 
   const handleNavigate = (user: string, postId: number, post: PostType, e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     console.log((e.target as Element).className);
@@ -27,7 +29,7 @@ const Post = ({ post, delay }: PostProps) => {
         <h4>Username: {post.user.username}</h4>
         <div>Title: {post.title}</div>
         <div>Content: {post.content}</div>
-        <LikingPost post={post} delay={delay} go={go} setGo={setGo} clearTimer={clearTimer} setClearTimer={setClearTimer} />
+        {post.user.username !== username && <LikingPost post={post} delay={delay} go={go} setGo={setGo} clearTimer={clearTimer} setClearTimer={setClearTimer} />}
       </article>
       {delay && go && !clearTimer && <DislikeModal setClearTimer={setClearTimer} />}
     </>
