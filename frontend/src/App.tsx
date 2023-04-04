@@ -13,11 +13,12 @@ import PostForm from './components/PostForm';
 import RegisterForm from './components/RegisterForm';
 import Profile from './components/Profile';
 import SinglePost from './components/SinglePost';
+import ErrorModal from './components/ErrorModal';
 
 import { useTheme } from './hooks/useTheme';
 
 const App = () => {
-  const { theme } = useTheme();
+  const { theme, errorMessage } = useTheme();
   const { username, likedPosts, setName, setLikedPosts, setUserId, setUsername } = useUserInfo();
 
   const { loading, error, data } = useQuery(LOGIN_ON_LOAD, {
@@ -57,6 +58,7 @@ const App = () => {
           <Route path='/profile/:username' element={<Profile />} />
           <Route path='/profile/:username/:id' element={<SinglePost />} />
         </Routes>
+        {errorMessage && <ErrorModal />}
       </div>
     );
   // } else if (error) {

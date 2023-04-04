@@ -4,12 +4,10 @@ import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
-
-
 import { EDIT_PROFILE } from '../mutations/user';
 import { useUserInfo } from '../hooks/useUserInfo';
-
-import { EditProfile, EditUserProfile, SingleUser } from '../types/user';
+import { useTheme } from '../hooks/useTheme';
+import { EditProfile, SingleUser } from '../types/user';
 import { PostType } from '../types/post';
 import { GET_USER } from '../queries/user';
 import { GET_ALL_POSTS } from '../queries/post';
@@ -22,16 +20,16 @@ interface FormValues {
 const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => {
   const location = useLocation();
   const { userId, setUsername, username } = useUserInfo();
+  const { setErrorMessage } = useTheme();
   const [formValues, setFormValues] = useState<FormValues | null>(null);
   const [previousUsername, setPreviousUsername] = useState<string | null>(username);
-  const previous = username;
 
   const validationSchema: yup.Schema<EditProfile> = yup.object().shape({
     username: yup
       .string()
+      .required('Username is required')
       .min(3, 'Username too short')
-      .max(20, 'Username too long')
-      .required('Username is required'),
+      .max(20, 'Username too long'),
     bio: yup
       .string(),
   });
@@ -44,31 +42,29 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
     refetchQueries: [{ query: GET_ALL_POSTS }],
     onError: (error) => {
       console.log(error);
+      console.log(error.message);
+      setErrorMessage(error.message);
       if (formValues) {
         setValue('bio', formValues.bio);
         setValue('username', formValues.username);
         setUsername(previousUsername);
-        console.log(username);
         window.history.replaceState(location.pathname, '', `/profile/${previousUsername}`);
       }
     },
     update: (store, { data: { editProfile } }) => {
       const data = store.readQuery<SingleUser | undefined>({ query: GET_USER,  variables: { singleUserId: Number(userId) } });
-      console.log(editProfile);
-      console.log(data);
       const newData = { singleUser: { ...data?.singleUser } };
       newData.singleUser.bio = editProfile.bio;
       newData.singleUser.username = editProfile.username;
+      // stringify makes a deep copy instead of shallow copy of spread - allows changing posts
       const newPosts: [PostType] = JSON.parse(JSON.stringify(newData.singleUser.posts));
       newPosts?.forEach(post => post.user.username = editProfile.username );
       newData.singleUser.posts = newPosts;
-      console.log(newPosts);
-      console.log(newData);
       store.writeQuery<SingleUser | undefined>({ query: GET_USER, data: newData as SingleUser });
     },
     onCompleted: () => setPreviousUsername(username)
   });
-  console.log(data?.editProfile.username);
+
   const onSubmit = (values: EditProfile) => {
     editProfile({ variables: { username: values.username, bio: values.bio, userId: Number(userId) },
       optimisticResponse: {
@@ -92,7 +88,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
     setValue('bio', '');
     setValue('username', '');
   };
-  console.log('test');
+
   useEffect(() => {
     if (data && isSubmitSuccessful) {
       console.log(data);
