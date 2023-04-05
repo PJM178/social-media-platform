@@ -17,6 +17,7 @@ interface FormValues {
   username: string
 }
 
+
 const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => {
   const location = useLocation();
   const { userId, setUsername, username } = useUserInfo();
@@ -64,7 +65,6 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
     },
     onCompleted: () => setPreviousUsername(username)
   });
-
   const onSubmit = (values: EditProfile) => {
     editProfile({ variables: { username: values.username, bio: values.bio, userId: Number(userId) },
       optimisticResponse: {
@@ -81,6 +81,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
         }
       }
     });
+    setErrorMessage(null);
     setPreviousUsername(username);
     setFormValues({ username: values.username, bio: values.bio });
     setUsername(values.username);
@@ -92,6 +93,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
   useEffect(() => {
     if (data && isSubmitSuccessful) {
       console.log(data);
+      console.log('jorma');
       reset();
     }
   }, [formState, reset]);
@@ -103,7 +105,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
       {errors.username && <div>{errors.username.message}</div>}
       <input placeholder="Bio" {...register('bio')} />
       {errors.bio && <div>{errors.bio.message}</div>}
-      <input type="submit" value="Edit Profile" />
+      <input type="submit" value="Save changes" />
     </form>
   );
 };

@@ -46,7 +46,7 @@ const App = () => {
 
   if (username || error) {
     return (
-      <div>
+      <>
         <Header />
         <SidePanel />
         <Routes>
@@ -59,7 +59,7 @@ const App = () => {
           <Route path='/profile/:username/:id' element={<SinglePost />} />
         </Routes>
         {errorMessage && <ErrorModal />}
-      </div>
+      </>
     );
   // } else if (error) {
   //   return (

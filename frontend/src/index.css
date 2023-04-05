@@ -256,6 +256,25 @@ aside {
   border-radius: 2px;
 }
 
+.user-profile-input-fields {
+  border: 0;
+  outline: 0;
+  background-color: inherit;
+  color: inherit;
+  opacity: 1;
+  animation: textDecoration 1s infinite;
+}
+
+@keyframes textDecoration {
+  0% { opacity: 1 }
+  50% { opacity: 0.5 }
+  100% { opacity: 1 }
+}
+
+.user-profile-input-fields:focus {
+  outline: none!important;
+}
+
 /* Modal - confirm disliking post from profile */
 
 .modal {
@@ -265,13 +284,15 @@ aside {
   margin-left: 10%;
   left: 0;
   top: 0;
-  width: 80%;
+  width: 80vw;
   height: 200px;
   overflow: auto;
 }
 
 .modal-content {
+  position: sticky;
   margin: auto;
+  z-index: 2;
   border: 1px solid #888;
   background-color: var(--background-color);
 }
@@ -295,6 +316,19 @@ aside {
   height: 3px;
   width: 100%;
   transition: 2s linear;
+}
+
+.progress-bar-error {
+  background-color: red;
+  height: 3px;
+  width: 100%;
+  /* transition: 5s linear; */
+  animation: errorProgressBar 5s linear
+}
+
+@keyframes errorProgressBar {
+  from { width: 100 }
+  to { width: 0 }
 }
 
 .close {

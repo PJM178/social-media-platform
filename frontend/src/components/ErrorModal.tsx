@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTheme } from '../hooks/useTheme';
 
 const ErrorModal = () => {
+  const timer: { current: NodeJS.Timeout | null }  = useRef(null);
   const { errorMessage, setErrorMessage } = useTheme();
-  const [progressBarWidth, setProgressBarWidth] = useState<number>(100);
-
 
   useEffect(() => {
-    setProgressBarWidth(0);
-
-    const timer = setTimeout(() => {
+    timer.current = setTimeout(() => {
       setErrorMessage(null);
     }, 5000);
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer.current as NodeJS.Timeout);
   }, []);
 
   return (
@@ -23,7 +20,7 @@ const ErrorModal = () => {
           <span onClick={() => setErrorMessage(null)} className="close">&times;</span>
           <p>Something went wrong - {errorMessage}</p>
         </div>
-        <div className="progress-bar" style={{ width: `${progressBarWidth}%`, transition: '5s linear' }}></div>
+        <div className="progress-bar-error"></div>
       </div>
     </div>
   );

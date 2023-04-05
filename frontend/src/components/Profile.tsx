@@ -31,6 +31,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [displayCategory, setDisplayCategory] = useState<string>('posts');
   const { userId, username, name, likedPosts } = useUserInfo();
+  const [displayInputs, setDisplayInputs] = useState<boolean>(false);
 
   if (!username) {
     useEffect(() => {
@@ -39,9 +40,11 @@ const Profile = () => {
     return null;
   }
 
+
   const { loading, error, data } = useQuery<SingleUser>(GET_USER, {
     variables: { singleUserId: Number(userId) },
   });
+
   console.log(likedPosts);
   console.log('single user', loading, error, data);
   console.log('reversed', [...data?.singleUser.userLikedPosts || []].reverse());
@@ -58,8 +61,8 @@ const Profile = () => {
             </div>
           </div>
           <div className='user-profile-buttons'>
-            <div>edit profile</div>
-            <EditProfileForm userData={data} />
+            <div onClick={() => setDisplayInputs(!displayInputs)}>edit profile</div>
+            {displayInputs && <EditProfileForm userData={data} />}
           </div>
           <div>
             <div className='user-profile-bio'>{data?.singleUser.bio}</div>
