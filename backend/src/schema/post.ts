@@ -28,6 +28,11 @@ const postTypeDefs = `
       type: String,
       userId: String
     ): likedPostResponse
+    addComment(
+      postId: Int!,
+      userId: Int!,
+      comment: String
+    ): Comment
   }
 `;
 

@@ -25,6 +25,7 @@ export const GET_SINGLE_POST = gql`
         username
       }
       comments {
+        id
         userId
         postId
         comment

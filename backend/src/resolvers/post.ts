@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql';
 import cookie from 'cookie';
 
 import { Post, Session, User, LikedPost, Comment } from '../models/index';
-import { PostEntry } from '../types/post';
+import { PostEntry, CommentEntry } from '../types/post';
 import { Cookies } from '../types/user';
 
 export const postResolvers = {
@@ -204,6 +204,28 @@ export const postResolvers = {
           },
         });
       }
-    }
+    },
+    addComment: async (_root: undefined, args: CommentEntry, { req }: Cookies) => {
+      const token = cookie.parse(req.headers.cookie as string).session;
+      if (!token) {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+      const sessionToken = await Session.findOne({ where: { userToken: token } });
+      if (sessionToken) {
+        console.log('Session validated');
+        const comment = await Comment.create({ ...args });
+        return comment;
+      } else {
+        throw new GraphQLError('Cannot validate the user', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+    },
   },
 };

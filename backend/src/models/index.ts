@@ -14,6 +14,9 @@ LikedPost.belongsTo(User);
 Post.hasMany(Comment);
 Comment.belongsTo(Post);
 
+User.hasMany(Comment);
+Comment.belongsTo(User);
+
 // User.belongsToMany(Post, { through: UserPosts, as: 'userposts' });
 // Post.belongsToMany(User, { through: UserPosts, as: 'userposts' });
 

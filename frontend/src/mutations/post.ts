@@ -40,3 +40,24 @@ export const EDIT_LIKES = gql`
     }
   }
 `;
+
+export const ADD_COMMENT = gql`
+  mutation AddComment(
+    $postId: Int!
+    $userId: Int!
+    $comment: String!
+  ) {
+    addComment(
+      postId: $postId
+      userId: $userId
+      comment: $comment
+    ) {
+      id
+      userId
+      postId
+      comment
+      createdAt
+      updatedAt
+    }
+  }
+`;
