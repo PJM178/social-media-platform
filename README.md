@@ -5,7 +5,8 @@ Currently features:
 
 * Displaying all posts on the homepage
 * Adding new posts, updating the homepage view
-* Liking posts
+* Liking posts, displaying liked posts on profile page
 * Session based user authentication
+* Adding comments to posts
 
 Made with TypeScript and React in the frontend and TypeScript and GraphQL in the backend. PostgreSQL is used as a database.
