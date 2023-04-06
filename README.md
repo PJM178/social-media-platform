@@ -10,3 +10,15 @@ Currently features:
 * Adding comments to posts
 
 Made with TypeScript and React in the frontend and TypeScript and GraphQL in the backend. PostgreSQL is used as a database.
+
+
+## Installation and Running
+
+Download the zip file, unzip the project, navigate to frontend and backend folders in VSC, for example, and run npm install. To run the frontend and backend run npm start and npm run dev, respectively.
+
+You need to put couple environment variableds into .env in the backend folder:
+
+DATABASE_URL - PostgreSQL url, for example ElephantSQL
+PORT - 4000 as a default
+SECRET - a string to sign the token for authentication
+CORS - react app url
