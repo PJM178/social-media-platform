@@ -31,6 +31,9 @@ export const GET_SINGLE_POST = gql`
         comment
         createdAt
         updatedAt
+        user {
+          username
+        }
       }
     }
   }

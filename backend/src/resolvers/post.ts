@@ -60,6 +60,12 @@ export const postResolvers = {
           },
           {
             model: Comment,
+            include: [
+              {
+                model: User,
+                attributes: { include: ['username'] },
+              }
+            ]
           },
         ],
       });

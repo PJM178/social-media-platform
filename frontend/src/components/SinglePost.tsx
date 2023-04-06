@@ -31,7 +31,8 @@ const SinglePost = () => {
         <section className='post-container'>
           {data.singlePost.comments.map(comment =>
             <article key={Number(comment.id)} className='post'>
-              <div >{comment.comment}</div>
+              <div>Username: {comment.user.username}</div>
+              <div>Comment: {comment.comment}</div>
             </article>
           )}
         </section>

@@ -6,6 +6,7 @@ const commentTypeDefs = `
     comment: String!,
     createdAt: String!,
     updatedAt: String!,
+    user: User,
   }
 `;
 

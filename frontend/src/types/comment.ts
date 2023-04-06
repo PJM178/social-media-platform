@@ -1,3 +1,8 @@
+interface User {
+  username: string
+  __typename: string
+}
+
 export interface Comment {
   id: string
   userId: number
@@ -5,4 +10,5 @@ export interface Comment {
   comment: string
   createdAt: string
   updatedAt: string
+  user: User
 }
