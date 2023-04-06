@@ -16,7 +16,7 @@ Made with TypeScript and React in the frontend and TypeScript and GraphQL in the
 
 Download the zip file, unzip the project, navigate to frontend and backend folders in VSC, for example, and run npm install. To run the frontend and backend run npm start and npm run dev, respectively.
 
-You need to put couple environment variableds into .env in the backend folder:
+You need to put couple environment variables into .env file in the backend folder:
 
 * DATABASE_URL - PostgreSQL url, for example ElephantSQL
 * PORT - 4000 as a default
