@@ -18,7 +18,7 @@ Download the zip file, unzip the project, navigate to frontend and backend folde
 
 You need to put couple environment variableds into .env in the backend folder:
 
-DATABASE_URL - PostgreSQL url, for example ElephantSQL
-PORT - 4000 as a default
-SECRET - a string to sign the token for authentication
-CORS - react app url
+* DATABASE_URL - PostgreSQL url, for example ElephantSQL
+* PORT - 4000 as a default
+* SECRET - a string to sign the token for authentication
+* CORS - react app url
