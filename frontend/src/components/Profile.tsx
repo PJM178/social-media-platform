@@ -60,8 +60,8 @@ const Profile = () => {
               <div className='user-profile-username grey-text-color'>{data?.singleUser.username ? data?.singleUser.username : username}</div>
             </div>
           </div>
-          <div className='user-profile-buttons'>
-            <div onClick={() => setDisplayInputs(!displayInputs)}>edit profile</div>
+          <div className='user-profile-buttons' style={{ backgroundColor: displayInputs === true ? 'green' : undefined }}>
+            <div className='user-profile-buttons-edit' onClick={() => setDisplayInputs(!displayInputs)}>edit profile</div>
             {displayInputs && <EditProfileForm userData={data} />}
           </div>
           <div>

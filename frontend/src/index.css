@@ -214,12 +214,19 @@ aside {
 }
 
 .user-profile-buttons {
+  padding: 5px 0 5px 0;
   text-align: center;
 }
 
-.user-profile-buttons:hover {
+.user-profile-buttons-edit{
+  padding: 5px 0 5px 0;
+}
+
+.user-profile-buttons-edit:hover {
   cursor: pointer;
-  background-color: var(--button-hover-color)
+  background-color: var(--button-hover-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .grey-text-color {
