@@ -1,17 +1,19 @@
 import { useLocation } from 'react-router';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import { GET_SINGLE_POST } from '../queries/post';
 import { SinglePostType } from '../types/post';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 import Post from './Post';
 import CommentForm from './CommentForm';
 
 const SinglePost = () => {
+  const { username } = useUserInfo();
   const location = useLocation();
-  const { id, username } = useParams();
-  console.log('id userid params', id, username);
+  const { id } = useParams();
+  console.log('id params', id);
 
   const { loading, data, error } = useQuery<SinglePostType>(GET_SINGLE_POST, {
     variables: { id: Number(id) },
@@ -27,7 +29,9 @@ const SinglePost = () => {
         <section className='post-container'>
           <Post post={data.singlePost} />
         </section>
-        <CommentForm post={data.singlePost} />
+        {username && <section className="single-post-form-container">
+          <CommentForm post={data.singlePost} />
+        </section>}
         <section className='post-container'>
           {data.singlePost.comments.map(comment =>
             <article key={Number(comment.id)} className='post'>

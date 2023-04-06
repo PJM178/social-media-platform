@@ -56,9 +56,9 @@ const CommentForm = ({ post }: SinglePostType) => {
   }, [formState, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className="single-post-form" onSubmit={handleSubmit(onSubmit)}>
       {/* {error && <div>{error.message}</div>} */}
-      <textarea placeholder="Comment" {...register('comment')} />
+      <textarea style={{ backgroundColor: 'var(--background-color)', resize: 'vertical' }} placeholder="Comment" {...register('comment')} />
       {errors.comment && <div>{errors.comment.message}</div>}
       <input type="submit" value="Submit" />
     </form>

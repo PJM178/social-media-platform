@@ -112,6 +112,19 @@ aside {
   cursor: pointer;
 }
 
+.single-post-form-container {
+  padding: 1rem;
+  display: grid;
+  justify-content: center;
+}
+
+.single-post-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+}
+
 .liking-post-button-like {
   width: fit-content;
   color: var(--grey-text-color);
