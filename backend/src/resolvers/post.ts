@@ -103,6 +103,38 @@ export const postResolvers = {
         });
       }
     },
+    deletePost: async (_root: undefined, args: { id: number }, { req }: Cookies) => {
+      console.log('test');
+      const token = cookie.parse(req.headers.cookie as string).session;
+      if (!token) {
+        throw new GraphQLError('Missing token', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+      const sessionToken = await Session.findOne({ where: { userToken: token } });
+      if (sessionToken) {
+        console.log('Session validated');
+        const post = await Post.findByPk(args.id);
+        if (post) {
+          await post.destroy();
+          return post;
+        } else {
+          throw new GraphQLError('Post not found', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR'
+            }
+          });
+        }
+      } else {
+        throw new GraphQLError('Cannot validate the user', {
+          extensions: {
+            code: 'FORBIDDEN'
+          }
+        });
+      }
+    },
     editLikes: async (_root: undefined, args: { id: number, type: 'inc' | 'dec', userId: number }, { req }: Cookies) => {
       const token = cookie.parse(req.headers.cookie as string).session;
       if (!token) {

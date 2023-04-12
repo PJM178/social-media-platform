@@ -18,6 +18,18 @@ export const ADD_POST = gql`
 
 `;
 
+export const DELETE_POST = gql`
+  mutation DeletePost(
+    $id: ID
+  ) {
+    deletePost (
+      id: $id
+    ) {
+      id
+    }
+  }
+`;
+
 export const EDIT_LIKES = gql`
   mutation EditLikes(
     $id: ID, 

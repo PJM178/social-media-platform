@@ -1,5 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 
+import { PostType } from '../types/post';
+
 interface UserType {
   username: string | null
   __typename: string | null
@@ -15,15 +17,17 @@ interface LikedPost {
 }
 
 interface UserContextProps {
-  userId: number | null,
-  setUserId: React.Dispatch<React.SetStateAction<number | null>>,
-  username: string | null,
-  setUsername: React.Dispatch<React.SetStateAction<string | null>>,
-  name: string | null,
-  setName: React.Dispatch<React.SetStateAction<string | null>>,
-  resetUserInfo: () => void,
+  userId: number | null
+  setUserId: React.Dispatch<React.SetStateAction<number | null>>
+  username: string | null
+  setUsername: React.Dispatch<React.SetStateAction<string | null>>
+  name: string | null
+  setName: React.Dispatch<React.SetStateAction<string | null>>
+  resetUserInfo: () => void
   likedPosts: LikedPost[] | null
-  setLikedPosts: React.Dispatch<React.SetStateAction<LikedPost[] | []>>,
+  setLikedPosts: React.Dispatch<React.SetStateAction<LikedPost[] | []>>
+  userPosts: PostType[] | null
+  setUserPosts: React.Dispatch<React.SetStateAction<PostType[] | []>>
 }
 
 export const UserContext = createContext<UserContextProps>({
@@ -36,6 +40,8 @@ export const UserContext = createContext<UserContextProps>({
   resetUserInfo: () => null,
   likedPosts: [],
   setLikedPosts: () => null,
+  userPosts: [],
+  setUserPosts: () => null,
 });
 
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
@@ -43,6 +49,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [likedPosts, setLikedPosts] = useState<LikedPost[] | []>([]);
+  const [userPosts, setUserPosts] = useState<PostType[] | []>([]);
   // const likedPosts: LikedPost[] = [];
 
   const resetUserInfo = () => {
@@ -50,6 +57,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     setUsername(null),
     setName(null);
     setLikedPosts([]);
+    setUserPosts([]);
   };
 
   const defaultValues: UserContextProps = {
@@ -62,6 +70,8 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     resetUserInfo,
     likedPosts,
     setLikedPosts,
+    userPosts,
+    setUserPosts,
   };
 
   return (

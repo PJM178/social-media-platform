@@ -19,7 +19,7 @@ import { useTheme } from './hooks/useTheme';
 
 const App = () => {
   const { theme, errorMessage } = useTheme();
-  const { username, likedPosts, setName, setLikedPosts, setUserId, setUsername } = useUserInfo();
+  const { username, userPosts, likedPosts, setName, setLikedPosts, setUserId, setUsername, setUserPosts } = useUserInfo();
 
   const { loading, error, data } = useQuery(LOGIN_ON_LOAD, {
     skip: username !== null,
@@ -31,6 +31,7 @@ const App = () => {
       setUserId(data.loginOnLoad.id);
       setUsername(data.loginOnLoad.username);
       setLikedPosts(data.loginOnLoad.userLikedPosts);
+      setUserPosts(data.loginOnLoad.posts);
     }
   });
 
@@ -42,8 +43,8 @@ const App = () => {
     }
   }, [theme]);
 
-  // console.log('app', loading, data, error);
-
+  console.log('user liked posts', likedPosts);
+  console.log('user posts', userPosts);
   if (username || error) {
     return (
       <>

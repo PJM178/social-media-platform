@@ -23,6 +23,9 @@ const postTypeDefs = `
       likes: Int,
       userId: Int
     ): Post
+    deletePost(
+      id: ID
+    ): Post
     editLikes(
       id: ID,
       type: String,
