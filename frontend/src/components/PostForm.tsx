@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_POST } from '../mutations/post';
 import { GET_ALL_POSTS } from '../queries/post';
 import { useUserInfo } from '../hooks/useUserInfo';
+import { LOGIN_ON_LOAD } from '../queries/user';
 
 // Types
 interface UserType {
@@ -31,7 +32,7 @@ const PostForm = () => {
   console.log(userId);
 
   const [addPost, { data, loading, error }] = useMutation(ADD_POST, {
-    refetchQueries: [{ query: GET_ALL_POSTS }],
+    refetchQueries: [{ query: GET_ALL_POSTS }, { query: LOGIN_ON_LOAD }],
     onError: (error) => {
       console.log(error);
     },

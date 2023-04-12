@@ -18,11 +18,13 @@ LikedPost.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 'id' },
+    onDelete: 'CASCADE'
   },
   postId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'posts', key: 'id' },
+    onDelete: 'CASCADE'
   },
 }, {
   sequelize,

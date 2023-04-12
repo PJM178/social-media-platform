@@ -20,6 +20,7 @@ const SinglePost = () => {
     onError: (error) => {
       console.log(error);
     },
+    fetchPolicy: 'cache-and-network',
   });
   console.log('single post data', data);
   // console.log(location.state);

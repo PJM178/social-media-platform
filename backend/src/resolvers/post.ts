@@ -72,7 +72,7 @@ export const postResolvers = {
       if (post) {
         return post;
       } else {
-        throw new GraphQLError('User not found', {
+        throw new GraphQLError('Post not found', {
           extensions: {
             code: 'INTERNAL_SERVER_ERROR'
           }

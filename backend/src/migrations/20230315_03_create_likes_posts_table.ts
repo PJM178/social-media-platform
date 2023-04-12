@@ -12,11 +12,13 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'users', key: 'id' },
+      onDelete: 'CASCADE',
     },
     post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'posts', key: 'id' },
+      onDelete: 'CASCADE',
     },
   });
 };

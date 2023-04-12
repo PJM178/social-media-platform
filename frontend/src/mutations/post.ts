@@ -25,7 +25,10 @@ export const DELETE_POST = gql`
     deletePost (
       id: $id
     ) {
+      title
+      content
       id
+      likes
     }
   }
 `;
