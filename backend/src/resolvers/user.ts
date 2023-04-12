@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { GraphQLError } from 'graphql';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
+import crypto from 'crypto';
 
 import { User, LikedPost, Session, Post } from '../models/index';
 import { UserEntry, UserLogin, Cookies, EditProfile } from '../types/user';
@@ -58,7 +59,7 @@ export const userResolvers = {
       const likedPosts = await LikedPost.findAll({});
       return likedPosts;
     },
-    loginOnLoad: async (_root: undefined, _args: undefined, { req }: Cookies) => {
+    loginOnLoad: async (_root: undefined, _args: undefined, { req, res }: Cookies) => {
       const token = cookie.parse(req.headers.cookie as string).session;      
       if (token) {
         const sessionToken = await Session.findOne({ where: { userToken: token } });
@@ -107,7 +108,15 @@ export const userResolvers = {
             //   likedPosts: user.likedPosts,
             // };
             // return { ...returnedUser };
-
+            const cryptoToken = crypto.randomBytes(32).toString('hex');
+            const token = jwt.sign(cryptoToken, process.env.SECRET as string);
+            await sessionToken.update({ userToken: token });
+            res.cookie('session', token, 
+              {
+                maxAge: 1000*60*60*24,
+                httpOnly: true,
+              }
+            );
             return user;
           } else {
             throw new GraphQLError('User not found', {
@@ -212,12 +221,17 @@ export const userResolvers = {
         });
       }
 
-      const objectForToken = {
-        nothing: 'nothing',
-        to: 'to',
-        see: 'see',
-        here: 'here',
-      };
+      // const objectForToken = {
+      //   nothing: 'nothing',
+      //   to: 'to',
+      //   see: 'see',
+      //   here: 'here',
+      // };
+
+      // Using the crypto module to generate a pseudo-random string
+      // to not include any information even if it's not actionable
+      const cryptoToken = crypto.randomBytes(32).toString('hex');
+      // console.log(cryptoToken);
 
       // const returnedUser = {
       //   id: user.id,
@@ -226,12 +240,14 @@ export const userResolvers = {
       //   likedPosts: user.likedPosts,
       // };
 
-      const token = jwt.sign(objectForToken, process.env.SECRET as string);
+      // const token = jwt.sign(objectForToken, process.env.SECRET as string);
+      const token = jwt.sign(cryptoToken, process.env.SECRET as string);
+      // console.log('crypto', signedCryptoToken);
+      // console.log('object token', token);
 
       const checkSession = await Session.findOne({ where: { user_id: user.id } });
       if (checkSession) {
         await checkSession.update({ userToken: token });
-        await checkSession.save();
       } else {
         await Session.create({ userToken: token, userId: user.id });
       }

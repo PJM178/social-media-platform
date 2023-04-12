@@ -54,11 +54,11 @@ const SigninForm = () => {
   }, [formState, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
       {error && <div>{error.message}</div>}
       <input placeholder="Username" {...register('username')} />
       {errors.username && <div>{errors.username.message}</div>}
-      <input placeholder="Password" {...register('password')} />
+      <input type='password' placeholder="Password" {...register('password')} />
       {errors.password && <div>{errors.password.message}</div>}
       <input type="submit" value="Sign in" />
     </form>

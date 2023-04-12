@@ -99,7 +99,7 @@ const EditProfileForm = ({ userData }: { userData: SingleUser | undefined }) => 
   }, [formState, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
       {/* {error && <div>{error.message}</div>} */}
       <input placeholder="Username" {...register('username')} />
       {errors.username && <div>{errors.username.message}</div>}
