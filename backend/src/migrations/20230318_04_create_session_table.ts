@@ -11,7 +11,8 @@ const up: Migration = async ({ context: queryInterface }) => {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'users', key: 'id' }
+      references: { model: 'users', key: 'id' },
+      onDelete: 'CASCADE',
     },
     user_token: {
       type: DataTypes.STRING,

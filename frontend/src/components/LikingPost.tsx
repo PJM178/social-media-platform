@@ -5,6 +5,7 @@ import { EDIT_LIKES } from '../mutations/post';
 import { GET_ALL_POSTS, GET_SINGLE_POST } from '../queries/post';
 import { LikingPostProps } from '../types/post';
 import { useUserInfo } from '../hooks/useUserInfo';
+import { LOGIN_ON_LOAD } from '../queries/user';
 
 // Types
 interface CacheUserType {

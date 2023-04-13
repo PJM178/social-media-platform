@@ -18,13 +18,17 @@ const Post = ({ post, delay }: PostProps) => {
   const [go, setGo] = useState<boolean>(false);
   const [clearTimer, setClearTimer] = useState<boolean>(true);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const { username, userPosts } = useUserInfo();
+  const { username, userPosts, setLikedPosts, likedPosts } = useUserInfo();
 
   const [deletePost, { loading, data, error }] = useMutation(DELETE_POST, {
     onError: (error) => {
       console.log(error);
     },
-    refetchQueries: [{ query: GET_ALL_POSTS }, { query: LOGIN_ON_LOAD }]
+    refetchQueries: [{ query: GET_ALL_POSTS }, { query: LOGIN_ON_LOAD }],
+    onCompleted: (data) => {
+      console.log(data);
+      setLikedPosts((likedPosts || []).filter(posts => posts.id !== post.id));
+    }
   });
 
   const handleNavigate = (user: string, postId: number, post: PostType, e: React.MouseEvent<HTMLElement, MouseEvent>) => {
